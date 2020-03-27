@@ -50,14 +50,58 @@ class Point {
 }
 
 // 1. Allocate memory for instance of Point on the heap with (x,y) = (0,0)
-// 2. Allocate memory for point1 on the stack storing address to instance of Point on the heap
+// 2. Allocate memory for point1 on the stack storing address to the Point object on the heap
 let point1 = Point(x: 0, y: 0)
 
-// Allocate memory for point2 on the stack storing address to instance of Point on the heap
+// Allocate memory for point2 on the stack storing address to the Point object on the heap
 var point2 = point1
 
 // point2.x is 5, and point1.x is now also 5
 point2.x = 5
+```
+Looking at the image above, it appears that the memory block allocated on the heap is more memory than is necessary to accommodate variables x & y. This is because an excess of memory is required to manage reference types. To name a subset: 
+* `isa` pointer - Reference types support inheritance, thus we need a way to walk the inheritance hierarchy in dynamic binding
+* Reference counter - Heap memory needs to be recycled when it's no longer in use, thus tracking active references to the memory is important
+
+Below is a snippet simulating (simplified) compiler generated logic from the code above to illustrate what's really going on behind the scenes:
+```Swift
+// Retain/release imeplementations
+func retain<T: ReferenceCounting>(_ object: T) {
+    object.refCount+=1
+}
+func release<T: ReferenceCounting>(_ object: T) {
+    object.refCount-=1
+}
+
+// All reference types implicitly support reference counting
+protocol ReferenceCounting : class {
+    var refCount : Int { get set }
+}
+extension Point : ReferenceCounting {}
+
+class Point {
+
+    // Reference types have memory allocated for reference counting
+    var refCount : Int
+    
+    var x, y : Double
+    init(x: Double, y: Double) {
+        refCount = 1
+        (self.x, self.y) = (x,y)
+    }
+}
+let point1 = Point(x: 0, y: 0)
+var point2 = point1
+
+// refCount of the Point object is incremented when point2 makes reference to it
+retain(point2)
+point2.x = 5
+
+// refCount of the Point object is decremented when point1 is popped off the call stack, 
+// and decremented again when point2 is popped off the stack.
+// Now refCount of the Point object is now 0, and can be safely recycled.
+release(point1)
+release(point2)
 ```
 
 ## Performance Metrics

@@ -8,7 +8,7 @@ The intent of this entry is to review the differences between reference & value 
 * Memory for value types are allocated on the call stack
 * Value types come with compiler-generated memberwise initializer
 * Value types do not support inheritance
-
+---
 ### Value Semantics:
 
 Below's a depiction of how simple value types are allocated in memory.
@@ -33,7 +33,52 @@ point2.x = 5
 ```
 The example from above is naive enough, but not very interesting. Value types with value type properties are allocated on the stack - we all know that. What about value types with reference type properties?
 
+---
 ### Value Types with Reference Type Properties:
+
+To understand what really happens when we have value types with reference type properties, we'll try things out for ourselves.
+```Swift
+// Name Type
+// Define reference type Name
+class Name {
+    var firstname, lastname : String
+    init(firstname: String, lastname: String) {
+        (self.firstname, self.lastname) = (firstname, lastname)
+    }
+}
+extension Name : CustomStringConvertible {
+    var description: String {
+        return "\(firstname) \(lastname)"
+    }
+}
+
+// Person Type
+// Define value type Person with reference type property Name
+struct Person {
+    var name : Name
+}
+
+// Person johnDoe has firstname "John", lastname "Doe" 
+let johnDoe = Person(name: Name(firstname: "John", lastname: "Doe"))
+
+// Create a new Person copy from johnDoe - Person janeSmith
+var janeSmith = johnDoe
+
+// Update janeSmith's first & last name
+janeSmith.name.firstname = "Jane"
+janeSmith.name.lastname = "Smith"
+
+// This outputs "Jane Smith"
+print(johnDoe.name)
+```
+What's really happening here is that we've indeed created 2 instances of Person on the stack, but these 2 instances in fact share the same reference of the Name object that's created in the heap. This is definitely not what we want, so how do we fix it?
+
+---
+### Copy-On-Write:
+
+The idea with copy-on-write is this: having multiple objects referencing the same reference type object is fine - as long as none of these references modify the object. When the object is modified though, we'd want to create a new copy of the object. Array also implements copy-on-write for performance reasons. Can you imagine a huge chunk of memory being allocated on the stack everytime a large array is assigned? Just thinking about it makes my spine tingle. Enough talk, here's the code.
+```Swift
+```
 
 ## Reference Types
 * Reference types are shared rather than copied

@@ -34,6 +34,32 @@ point2.x = 5
 * Reference types do not come with compiler-generated memberwise initializer
 * Reference types can support inheritance
 
+<img src="images/reference-type-memorylayout.png" height="260"/>
+
+Image from [Presentation Slides, WWDC 2016, Session 416](https://devstreaming-cdn.apple.com/videos/wwdc/2016/416k7f0xkmz28rvlvwb/416/416_understanding_swift_performance.pdf?dl=1)
+```Swift
+// Define reference type Point
+class Point {
+    var x, y : Double
+
+    // Reference types don't come with memberwise initializer
+    // We need to explicitly declare one
+    init(x: Double, y: Double) {
+        (self.x, self.y) = (x,y)
+    }
+}
+
+// 1. Allocate memory for instance of Point on the heap with (x,y) = (0,0)
+// 2. Allocate memory for point1 on the stack storing address to instance of Point on the heap
+let point1 = Point(x: 0, y: 0)
+
+// Allocate memory for point2 on the stack storing address to instance of Point on the heap
+var point2 = point1
+
+// point2.x is 5, and point1.x is now also 5
+point2.x = 5
+```
+
 ## Performance Metrics
 ### Is memory allocated on stack or heap?
 * Stack - memory allocation is fast

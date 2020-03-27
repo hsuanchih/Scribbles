@@ -23,8 +23,8 @@ var point2 = point1
 // Update point2's variable x
 point2.x = 5
 ```
+<img src="images/value-type-memorylayout.png" height="300"/>
 
-![value semantics](images/value-type-memorylayout.png)
 Image from [Presentation Slides, WWDC 2016, Session 416](https://devstreaming-cdn.apple.com/videos/wwdc/2016/416k7f0xkmz28rvlvwb/416/416_understanding_swift_performance.pdf?dl=1)
 
 ## Reference Types

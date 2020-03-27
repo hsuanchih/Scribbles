@@ -8,24 +8,25 @@ The intent of this entry is to review the differences between reference & value 
 * Value types come with compiler-generated memberwise initializer
 * Value types do not support inheritance
 
+<img src="images/value-type-memorylayout.png" height="260"/>
+
+Image from [Presentation Slides, WWDC 2016, Session 416](https://devstreaming-cdn.apple.com/videos/wwdc/2016/416k7f0xkmz28rvlvwb/416/416_understanding_swift_performance.pdf?dl=1)
 ```Swift
-// Define a value type Point
+// Define value type Point
 struct Point {
     var x, y : Double
 }
 
-// Instantiate point1
+// Allocate memory for point1 on the stack & initialize (x,y) = (0,0)
 let point1 = Point(x: 0, y: 0)
 
-// Assign point1 to a Point type variable point2
+// Allocate memory for point2 on the stack & initialize (x,y) = (point1.x, point1.y)
 var point2 = point1
 
-// Update point2's variable x
+// point1.x is 0, point2.x is 5
 point2.x = 5
 ```
 
-![value semantics](images/value-type-memorylayout.png)
-Image from [Presentation Slides, WWDC 2016, Session 416](https://devstreaming-cdn.apple.com/videos/wwdc/2016/416k7f0xkmz28rvlvwb/416/416_understanding_swift_performance.pdf?dl=1)
 
 ## Reference Types
 * Reference types are shared rather than copied

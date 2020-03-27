@@ -17,8 +17,13 @@ struct Point {
     var x, y : Double
 }
 
+// Allocate memory for point1 on the stack & initialize (x,y) = (0,0)
 let point1 = Point(x: 0, y: 0)
+
+// Allocate memory for point2 on the stack & initialize (x,y) = (point1.x, point1.y)
 var point2 = point1
+
+// point1.x is 0, point2.x is 5
 point2.x = 5
 ```
 

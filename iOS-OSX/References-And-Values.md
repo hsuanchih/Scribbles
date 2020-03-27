@@ -2,11 +2,16 @@
 ---
 The intent of this entry is to review the differences between reference & value types, and leverage our understanding to optmize the performance of our applications. I reckon it's probably most appropriate, as a warm up to this discussion, to first revisit the fundamentals from [WWDC 2016, Session 416 - Understanding Swift Performance](https://developer.apple.com/videos/play/wwdc2016/416/).
 
+---
 ## Value Types
 * Value types are copied rather than shared
 * Memory for value types are allocated on the call stack
 * Value types come with compiler-generated memberwise initializer
 * Value types do not support inheritance
+
+### Value Semantics:
+
+Below's a depiction of how simple value types are allocated in memory.
 
 <img src="images/value-type-memorylayout.png" height="260"/>
 
@@ -26,7 +31,9 @@ var point2 = point1
 // point1.x is 0, point2.x is 5
 point2.x = 5
 ```
+The example from above is naive enough, but not very interesting. Value types with value type properties are allocated on the stack - we all know that. What about value types with reference type properties?
 
+### Value Types with Reference Type Properties:
 
 ## Reference Types
 * Reference types are shared rather than copied

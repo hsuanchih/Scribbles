@@ -81,7 +81,7 @@ janeSmith.lastname = "Smith"
 // This outputs "Jane Smith", even though we expect johnDoe's name to be "John Doe"
 print(johnDoe.name)
 ```
-What's really happening here is that we've indeed created 2 instances of Person on the stack, but these 2 instances in fact share the same reference of the Name object that's created in the heap. This is definitely not what we want, so how do we fix it?
+What's really happening here is that we've indeed created 2 instances of Person on the stack, but these 2 instances in fact share the same reference of the Name object that's created on the heap. This is definitely not what we want, so how do we fix it?
 
 ---
 ### Copy-On-Write:

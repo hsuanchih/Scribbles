@@ -162,8 +162,8 @@ What's really happening here is that we've indeed created 2 instances of Person 
 
 ---
 ## Copy-On-Write
-### Getting Value Semantics from Mixed Types:
 
+### Getting Value Semantics from Mixed Types:
 The idea with copy-on-write is this: having multiple objects referencing the same reference type object is fine - as long as none of these references modify the object. When the object is modified though, we'd want to create a new copy of the object. Here's how we can use copy-on-write to avoid problems with value types wrapping reference types.
 
 ```Swift
@@ -225,8 +225,8 @@ janeSmith.lastname = "Smith"
 // This now outputs "John Doe", as desired
 print(johnDoe.name)
 ```
-### Optimizing System Performance:
 
+### Optimizing System Performance:
 We learned how to use copy-on-write to get value semantics from mixed types, but uses of copy-on-write go far beyond. For example, Swift's Array implementation reduces memory footprint by intentionally wrapping value types inside reference types, using copy-on-write (lazy copy) to avoid excessive memory allocation of large value type objects. Can you imagine a huge chunk of memory being allocated on the stack everytime a large array is assigned or passed into a function call? Just thinking about it makes my spine tingle. If we ever find ourselves in need of a similar performance boost, the template is very similar to what we have laid out earlier.
 
 ```Swift
@@ -257,16 +257,52 @@ struct ValueType<T> {
     }
 }
 ```
+---
+## Boxing
 
-## Performance Metrics
-### Is memory allocated on stack or heap?
+If you've overheard people talking about a technique called boxing, it is the idea of wrapping value types in reference types so that value types can be passed around with very little incurred memory footprint (where appropriate). This is the same concept we've discussed earlier, the only difference being nomenclature. I'm listing it here for the sake of completeness.
+
+```Swift
+// Define value type Dog
+struct Dog {
+    let age : Int
+}
+
+// Box is a reference type wrapping a value type
+final class Box<T> {
+    var value: T
+    init(value: T) {
+        self.value = value
+    }
+}
+
+// Now we can pass value type Dog around as a reference
+class Container {
+    let box: Box<Dog>
+    init(_ dog: Dog) {
+        box = Box(value: Dog(age: 2))
+    }
+}
+```
+---
+## Wrapping Up
+### Performance Metrics:
+
+Here are some of the questions worth asking when deliberating between using reference types versus value types:
+
+__Is memory allocated on stack or heap?__
 * Stack - memory allocation is fast
     * Decrement & increment the stak pointer to allocate & deallocate memory.
 * Heap - memory allocation is slow
     * Need to search for contiguous blocks of memory of sufficient size, potentially de-fragmenting memory blocks to satisfy the allocation
     * House-keeping post deallocation
     * Thread-safety overhead (locking mechanism) with heap access
+    
+__How much reference counting overhead is incurred at run-time?__
+* Reference counting needs to be atomic, making it an expensive operation
+* A good tradeoff is a balance between reasonable memory footprint & minimal reference counting
 
-### How much reference counting overhead is incurred at run-time?
-
-### What portion of method calls on instances are dynamically dispatched?
+__What portion of method calls on instances are dynamically dispatched?__
+* Static dispatch allows for optimization at compile time such as code inlining
+* Minimal runtime dispatch translates to better system performance
+* Prioritize value types over reference types if possible, alternatively declare reference types as final if they are not meant to be subclassed

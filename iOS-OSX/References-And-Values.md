@@ -260,7 +260,7 @@ struct ValueType<T> {
 ---
 ## Boxing
 
-If you've overheard people talking about a technique called boxing, it is the idea of wrapping value types in reference types so that value types can be passed around with very little incurred memory footprint (where appropriate). This is the same concept we've discussed earlier, the only difference being nomenclature. I'm listing it here for the sake of completeness.
+If you've overheard people talking about a technique called boxing, it is the idea of wrapping value types in reference types so that value types can be passed around with very little incurred memory footprint (where appropriate). This is the exact concept we've discussed earlier; the only difference is nomenclature. I'm listing it here for the sake of completeness.
 
 ```Swift
 // Define value type Dog

@@ -210,7 +210,7 @@ var point2 = point1
 // point2.x is 5, and point1.x is now also 5
 point2.x = 5
 ```
-Looking at the image above, it appears that the memory block allocated on the heap is more memory than is necessary to accommodate variables x & y. This is because an excess of memory is required to manage reference types.</br> 
+From the image above, it appears that the memory block allocated on the heap is more memory than is necessary to accommodate variables x & y. This is because an excess of memory is required to manage reference types.</br> 
 To name a subset here: 
 * __`isa` pointer__ - Reference types support inheritance, thus we need a way to walk the inheritance hierarchy in dynamic binding
 * __Reference counter__ - Heap memory needs to be recycled when it's no longer in use, thus tracking active references to the memory is important

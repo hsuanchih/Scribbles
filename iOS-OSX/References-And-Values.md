@@ -55,7 +55,17 @@ extension Name : CustomStringConvertible {
 // Person Type
 // Define value type Person with reference type property Name
 struct Person {
-    var name : Name
+    public let name : Name
+    
+    // Accessors for the Person's firstname & lastname
+    public var firstname : String {
+        get { return name.firstname }
+        set { name.firstname = newValue }
+    }
+    public var lastname : String {
+        get { return name.lastname }
+        set { name.lastname = newValue }
+    }
 }
 
 // Person johnDoe has firstname "John", lastname "Doe" 
@@ -65,10 +75,10 @@ let johnDoe = Person(name: Name(firstname: "John", lastname: "Doe"))
 var janeSmith = johnDoe
 
 // Update janeSmith's first & last name
-janeSmith.name.firstname = "Jane"
-janeSmith.name.lastname = "Smith"
+janeSmith.firstname = "Jane"
+janeSmith.lastname = "Smith"
 
-// This outputs "Jane Smith"
+// This outputs "Jane Smith", even though we expect johnDoe's name to be "John Doe"
 print(johnDoe.name)
 ```
 What's really happening here is that we've indeed created 2 instances of Person on the stack, but these 2 instances in fact share the same reference of the Name object that's created in the heap. This is definitely not what we want, so how do we fix it?
@@ -77,7 +87,63 @@ What's really happening here is that we've indeed created 2 instances of Person 
 ### Copy-On-Write:
 
 The idea with copy-on-write is this: having multiple objects referencing the same reference type object is fine - as long as none of these references modify the object. When the object is modified though, we'd want to create a new copy of the object. Array also implements copy-on-write for performance reasons. Can you imagine a huge chunk of memory being allocated on the stack everytime a large array is assigned? Just thinking about it makes my spine tingle. Enough talk, here's the code.
+
 ```Swift
+// Name Type
+// Define reference type Name
+class Name {
+    var firstname, lastname : String
+    init(firstname: String, lastname: String) {
+        (self.firstname, self.lastname) = (firstname, lastname)
+    }
+}
+extension Name : CustomStringConvertible {
+    var description: String {
+        return "\(firstname) \(lastname)"
+    }
+}
+
+// Person Type
+// Define value type Person with reference type property Name
+struct Person {
+    public private(set) var name : Name
+    
+    // Accessors for the Person's firstname & lastname
+    public var firstname : String {
+        get { return name.firstname }
+        set {
+            // Check to see if there are other references to name,
+            // if there are, create a new Name object assign the name reference to it
+            if !isKnownUniquelyReferenced(&name) {
+                name = Name(firstname: name.firstname, lastname: name.lastname)
+            }
+            name.firstname = newValue
+        }
+    }
+    public var lastname : String {
+        get { return name.lastname }
+        set {
+            // Same check is done here as for firstname, but here we assign the new value to the lastname property
+            if !isKnownUniquelyReferenced(&name) {
+                name = Name(firstname: name.firstname, lastname: name.lastname)
+            }
+            name.lastname = newValue
+        }
+    }
+}
+
+// Person johnDoe has firstname "John", lastname "Doe" 
+let johnDoe = Person(name: Name(firstname: "John", lastname: "Doe"))
+
+// Create a new Person copy from johnDoe - Person janeSmith
+var janeSmith = johnDoe
+
+// Update janeSmith's first & last name
+janeSmith.firstname = "Jane"
+janeSmith.lastname = "Smith"
+
+// This now outputs "John Doe", as desired
+print(johnDoe.name)
 ```
 
 ## Reference Types

@@ -148,7 +148,7 @@ janeSmith.lastname = "Smith"
 print(johnDoe.name)
 ```
 
-We used copy-on-write to remedy unexpected behavior with reference types wrapped in value types, but uses of copy-on-write go far beyond. For example, Swift's Array implementation reduces memory footprint by intentionally wrapping value types inside reference types, using copy-on-write (lazy copy) to avoid excessive memory allocation of large value type objects. Can you imagine a huge chunk of memory being allocated on the stack everytime a large array is assigned or passed into a function call? Just thinking about it makes my spine tingle. If we ever find ourselves in need of a similar performance boost, the template is very similar to what we have done before.
+We learned how to use copy-on-write to get value semantics from mixed types, but uses of copy-on-write go far beyond. For example, Swift's Array implementation reduces memory footprint by intentionally wrapping value types inside reference types, using copy-on-write (lazy copy) to avoid excessive memory allocation of large value type objects. Can you imagine a huge chunk of memory being allocated on the stack everytime a large array is assigned or passed into a function call? Just thinking about it makes my spine tingle. If we ever find ourselves in need of a similar performance boost, the template is very similar to what we have laid out earlier.
 
 ```Swift
 // Reference type Ref is a value type wrapper

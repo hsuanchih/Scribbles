@@ -86,7 +86,7 @@ What's really happening here is that we've indeed created 2 instances of Person 
 ---
 ### Copy-On-Write:
 
-The idea with copy-on-write is this: having multiple objects referencing the same reference type object is fine - as long as none of these references modify the object. When the object is modified though, we'd want to create a new copy of the object. Array also implements copy-on-write for performance reasons. Can you imagine a huge chunk of memory being allocated on the stack everytime a large array is assigned? Just thinking about it makes my spine tingle. Enough talk, here's the code.
+The idea with copy-on-write is this: having multiple objects referencing the same reference type object is fine - as long as none of these references modify the object. When the object is modified though, we'd want to create a new copy of the object. Here's how we can use copy-on-write to avoid problems with value types wrapping reference types.
 
 ```Swift
 // Name Type
@@ -115,7 +115,8 @@ struct Person {
             // Check to see if there are other references to name,
             // if there are, create a new Name object assign the name reference to it
             if !isKnownUniquelyReferenced(&name) {
-                name = Name(firstname: name.firstname, lastname: name.lastname)
+                name = Name(firstname: newValue, lastname: name.lastname)
+                return
             }
             name.firstname = newValue
         }
@@ -125,7 +126,8 @@ struct Person {
         set {
             // Same check is done here as for firstname, but here we assign the new value to the lastname property
             if !isKnownUniquelyReferenced(&name) {
-                name = Name(firstname: name.firstname, lastname: name.lastname)
+                name = Name(firstname: name.firstname, lastname: newValue)
+                return
             }
             name.lastname = newValue
         }
@@ -144,6 +146,37 @@ janeSmith.lastname = "Smith"
 
 // This now outputs "John Doe", as desired
 print(johnDoe.name)
+```
+
+We used copy-on-write to remedy unexpected behavior with reference types wrapped in value types, but uses of copy-on-write go far beyond. For example, Swift's Array implementation reduces memory footprint by intentionally wrapping value types inside reference types, using copy-on-write (lazy copy) to avoid excessive memory allocation of large value type objects. Can you imagine a huge chunk of memory being allocated on the stack everytime a large array is assigned or passed into a function call? Just thinking about it makes my spine tingle. If we ever find ourselves in need of a similar performance boost, the template is very similar to what we have done before.
+
+```Swift
+// Reference type Ref is a value type wrapper
+final class Ref<T> {
+    var val : T
+    init(_ v : T) {val = v}
+}
+
+struct ValueType<T> {
+
+    // The ref variable holds the reference type Ref, 
+    // and wraps the value type on initialization
+    var ref : Ref<T>
+    init(_ x : T) { ref = Ref(x) }
+
+    var value: T {
+        get { return ref.val }
+        set {
+            // If reference to ref is not unique, we want to create a new object
+            if !isKnownUniquelyReferenced(&ref) {
+                ref = Ref(newValue)
+                return
+            }
+            // Otherwise just use the existing reference
+            ref.val = newValue
+        }
+    }
+}
 ```
 
 ## Reference Types

@@ -40,7 +40,7 @@ To understand what really happens when we have value types with reference type p
 ```Swift
 // Name Type
 // Define reference type Name
-class Name {
+final class Name {
     var firstname, lastname : String
     init(firstname: String, lastname: String) {
         (self.firstname, self.lastname) = (firstname, lastname)
@@ -91,7 +91,7 @@ The idea with copy-on-write is this: having multiple objects referencing the sam
 ```Swift
 // Name Type
 // Define reference type Name
-class Name {
+final class Name {
     var firstname, lastname : String
     init(firstname: String, lastname: String) {
         (self.firstname, self.lastname) = (firstname, lastname)

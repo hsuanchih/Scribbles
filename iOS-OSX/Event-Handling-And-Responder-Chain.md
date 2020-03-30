@@ -1,7 +1,7 @@
 # Event-Handling & Responders
 ---
 
-We know that when we add a `button` to a `view controller` or a `view` and wire up a target-action, our action method ends up getting called when the user taps on the button. 
+We know that when we add a [button](https://developer.apple.com/documentation/uikit/uibutton) to a [view controller](https://developer.apple.com/documentation/uikit/uiviewcontroller)'s [view](https://developer.apple.com/documentation/uikit/uiviewcontroller/1621460-view) or some [view](https://developer.apple.com/documentation/uikit/uiview) and wire up a [target-action](https://developer.apple.com/library/archive/documentation/General/Conceptual/Devpedia-CocoaApp/TargetAction.html#//apple_ref/doc/uid/TP40009071-CH3), our action method ends up getting called when the user taps on the button. 
 
 We're going into detail about how all of this happens.
 
@@ -63,3 +63,16 @@ class UIView : UIResponder {
     }
 }
 ```
+
+In our case, the intended event recipient is the [button](https://developer.apple.com/documentation/uikit/uibutton) we've added to our [view controller](https://developer.apple.com/documentation/uikit/uiviewcontroller)'s [view](https://developer.apple.com/documentation/uikit/uiviewcontroller/1621460-view).
+
+---
+## Handling the Event
+
+The event recipient can either choose to handle the event or not handle the event. In the case where the recipient wishes to handle the event, it does so by implementing any one of the following [`UIResponder`](https://developer.apple.com/documentation/uikit/uiresponder) methods (for practical reasons, however, it probably implements most of them):
+* [`func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?)`](https://developer.apple.com/documentation/uikit/uiresponder/1621142-touchesbegan)
+* [`func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?)`](https://developer.apple.com/documentation/uikit/uiresponder/1621107-touchesmoved)
+* [`func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?)`](https://developer.apple.com/documentation/uikit/uiresponder/1621084-touchesended)
+* [`func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?)`](https://developer.apple.com/documentation/uikit/uiresponder/1621116-touchescancelled)
+
+Our button implements all of them. Moreover, [`UIButton`](https://developer.apple.com/documentation/uikit/uibutton) is a [`UIControl`](https://developer.apple.com/documentation/uikit/uicontrol) subclass, meaning that our action method will be invoked depending on the [control event(s)](https://developer.apple.com/documentation/uikit/uicontrol/event) we've wired our [target-action](https://developer.apple.com/library/archive/documentation/General/Conceptual/Devpedia-CocoaApp/TargetAction.html#//apple_ref/doc/uid/TP40009071-CH3) against.

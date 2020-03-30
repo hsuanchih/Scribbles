@@ -69,7 +69,7 @@ In our case, the intended event recipient is the [button](https://developer.appl
 ---
 ## Handling the Event
 
-The event recipient can either choose to handle the event or not handle the event. In the case where the recipient wishes to handle the event, it does so by implementing any one of the following [`UIResponder`](https://developer.apple.com/documentation/uikit/uiresponder) methods (for practical reasons, however, it probably implements most of them):
+The event recipient can either choose to handle the event or to not handle the event. In the case where the recipient wishes to handle the event, it does so by implementing any one of the following [`UIResponder`](https://developer.apple.com/documentation/uikit/uiresponder) methods (for practical reasons, however, it probably implements most of them):
 * [`func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?)`](https://developer.apple.com/documentation/uikit/uiresponder/1621142-touchesbegan)
 * [`func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?)`](https://developer.apple.com/documentation/uikit/uiresponder/1621107-touchesmoved)
 * [`func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?)`](https://developer.apple.com/documentation/uikit/uiresponder/1621084-touchesended)
@@ -113,3 +113,18 @@ class UIButton : UIControl {
     }
 }
 ```
+---
+## Not Handling the Event
+
+The intended recipient can indicate that it doesn't want to handle the event by not implementing any of the [`UIResponder`](https://developer.apple.com/documentation/uikit/uiresponder) methods listed above, delegating event handling to other objects. These objects must be instances of [`UIResponder`](https://developer.apple.com/documentation/uikit/uiresponder) subclasses, and are collectively referred to as responders. Instances of [`UIApplication`](https://developer.apple.com/documentation/uikit/uiapplication), [`UIWindow`](https://developer.apple.com/documentation/uikit/uiwindow), [`UIViewController`](https://developer.apple.com/documentation/uikit/uiviewcontroller), and [`UIView`](https://developer.apple.com/documentation/uikit/uiview) subclasses are all responders. So how does the application decide on which is the next responder to handle the event? It follows a policy generally referred to as the responder chain.
+
+---
+## The Responder Chain
+
+Rules to walk the responder chain is as follows:
+
+__Hit-Tested View__ --> __Superview__ --> __... Superviews ...__ --> __View Controller__ --> __Window__ --> __Application__ --> __App Delegate__
+
+The application takes this path starting from hit-tested view to identify a responder willing to handle the event. If it reached the application delegate without finding one, then event discarded at last.
+
+![Responder Chain](images/responder-chain.png)

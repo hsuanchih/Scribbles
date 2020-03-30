@@ -128,3 +128,12 @@ __Hit-Tested View__ --> __Superview__ --> __... Superviews ...__ --> __View Cont
 The application takes this path starting from hit-tested view to identify a responder willing to handle the event. If it reached the application delegate without finding one, then event discarded at last.
 
 ![Responder Chain](images/responder-chain.png)
+
+---
+## Designating a Responder
+
+A way to intercept event handling is to simply designate a responder object as the first responder. We've probably done this more than a few times in the past: 
+* Calling [`becomeFirstResponder()`](https://developer.apple.com/documentation/uikit/uiresponder/1621113-becomefirstresponder) on a [text field](https://developer.apple.com/documentation/uikit/uitextfield) when the user taps the `Next` key on the keyboard to bring up the next input.
+* Overriding the [`canBecomeFirstResponder`](https://developer.apple.com/documentation/uikit/uiresponder/1621130-canbecomefirstresponder) and one of [`inputView`](https://developer.apple.com/documentation/uikit/uiresponder/1621092-inputview) / [`inputViewController`](https://developer.apple.com/documentation/uikit/uiresponder/1621117-inputviewcontroller) / [`inputAccessoryView`](https://developer.apple.com/documentation/uikit/uiresponder/1621119-inputaccessoryview) / [`inputAccessoryViewController`](https://developer.apple.com/documentation/uikit/uiresponder/1621124-inputaccessoryviewcontroller) properties on our [view controller](https://developer.apple.com/documentation/uikit/uiviewcontroller) to get that nifty UI in our chat app.
+
+Now we have a slightly better understanding of how everything comes together.

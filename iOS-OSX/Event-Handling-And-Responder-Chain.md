@@ -75,4 +75,41 @@ The event recipient can either choose to handle the event or not handle the even
 * [`func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?)`](https://developer.apple.com/documentation/uikit/uiresponder/1621084-touchesended)
 * [`func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?)`](https://developer.apple.com/documentation/uikit/uiresponder/1621116-touchescancelled)
 
-Our button implements all of them. Moreover, [`UIButton`](https://developer.apple.com/documentation/uikit/uibutton) is a [`UIControl`](https://developer.apple.com/documentation/uikit/uicontrol) subclass, meaning that our action method will be invoked depending on the [control event(s)](https://developer.apple.com/documentation/uikit/uicontrol/event) we've wired our [target-action](https://developer.apple.com/library/archive/documentation/General/Conceptual/Devpedia-CocoaApp/TargetAction.html#//apple_ref/doc/uid/TP40009071-CH3) against.
+Our [button](https://developer.apple.com/documentation/uikit/uibutton) implements all of them, and our action method will be invoked depending on the [control event(s)](https://developer.apple.com/documentation/uikit/uicontrol/event) we've wired our [target-action](https://developer.apple.com/library/archive/documentation/General/Conceptual/Devpedia-CocoaApp/TargetAction.html#//apple_ref/doc/uid/TP40009071-CH3) for, that is, when the button calls [`UIControl`](https://developer.apple.com/documentation/uikit/uicontrol)'s [`sendAction(_:to:for:)`](https://developer.apple.com/documentation/uikit/uicontrol/1618237-sendaction) method on its registered targets and action methods.
+
+```Swift
+class UIButton : UIControl {
+
+    .
+    .
+    // A simplified touchesBegan implementation for UIButton to trigger target-action
+    override open func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+    
+        // Do a bunch of other stuff here
+        .
+        .
+        // Trigger target-action
+        sendActions(for: .touchDown)
+    }
+    
+    // A simplified touchesEnded implementation for UIButton to trigger target-action
+    override open func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
+    
+        // Do a bunch of other stuff here
+        .
+        .
+        // Trigger target-action
+        switch touches.first?.location(in: self) {
+        case let .some(touchPoint) where hitTest(touchPoint, with: event) != nil:
+            sendActions(for: .touchUpInside)
+        case let .some(touchPoint) where hitTest(touchPoint, with: event) == nil:
+            sendActions(for: .touchUpOutside)
+        // Handle some other cases here
+        .
+        .
+        default:
+            break
+        }
+    }
+}
+```

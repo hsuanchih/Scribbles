@@ -10,11 +10,15 @@ We're going into detail about how all of this happens.
 
 When a user taps on the phone's screen, a sequence of activities happen in the following order:
 1. The finger creates a change in the electrostatic field at the location where the screen is touched, delivering an electric signal to the processor.
+
 2. The operating system relays the event to the application's main event queue.
+
 3. The event gets pulled off the event queue by the application's main run loop at some point, and is converted into an [UITouch](https://developer.apple.com/documentation/uikit/uitouch) object wrapped in an [UIEvent](https://developer.apple.com/documentation/uikit/uievent) object for dispatch.</br></br>
+
 ![Main Event Loop](images/main-event-loop.jpg)
 
-Image from [Apple](https://developer.apple.com/library/archive/documentation/General/Conceptual/Devpedia-CocoaApp/MainEventLoop.html#//apple_ref/doc/uid/TP40009071-CH18-SW1)
+Image from [Apple](https://developer.apple.com/library/archive/documentation/General/Conceptual/Devpedia-CocoaApp/MainEventLoop.html#//apple_ref/doc/uid/TP40009071-CH18-SW1)</br></br>
+
 
 4. This event object travels down the dispatch hierarchy following path:
 

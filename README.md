@@ -4,7 +4,7 @@ I'm starting a scratchpad to digest various concepts, starting with the basics &
 
 * [Concurrency, GCD & Operations](iOS-OSX/Concurrency-GCD-Operations.md)
 * [Event-Handling & Responder-Chain](iOS-OSX/Event-Handling-And-Responder-Chain.md)
-* [Reference & Value Types](iOS-OSX/References-And-Values.md)
+* [Reference & Value Semantics](iOS-OSX/References-And-Values.md)
 * [Method Dispatch](iOS-OSX/Method-Dispatch.md)
 
 ## Author

@@ -130,6 +130,11 @@ The application takes this path starting from hit-tested view to identify a resp
 ![Responder Chain](images/responder-chain.png)
 
 ---
+## Hijacking the Responder Chain
+
+A responder, however, can alter the responder chain by explicitly designating the next responder in the chain by overriding [`UIResponder`](https://developer.apple.com/documentation/uikit/touches_presses_and_gestures/using_responders_and_the_responder_chain_to_handle_events)'s [`next`](https://developer.apple.com/documentation/uikit/uiresponder/1621099-next) property.
+
+---
 ## Designating a Responder
 
 A way to intercept event handling is to simply designate a responder object as the first responder. We've probably done this more than a few times in the past: 

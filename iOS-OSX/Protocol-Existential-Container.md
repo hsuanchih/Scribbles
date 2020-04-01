@@ -81,7 +81,46 @@ Things seem to work out nicely for instances of `Point` - its coordinate (x,y) f
 |_______________________|
 
 ```
-Now that's quite a bit of added run-time overhead just to store a line (heap allocation & reference counting). Recall that we've allocated 5 words to the existential container - why don't we just make use of the other 2 words and avoid the extra work altogether? These 2 words are dedicated to their purposes, and we'll look at them next.
+Now that's quite a bit of added run-time overhead just to store a line (heap allocation & reference counting). Recall that we've allocated 5 words to the existential container - why don't we just make use of the other 2 words and avoid the extra work altogether? These 2 words are dedicated to their own purposes, and we'll look at them next.
 
 ---
 ## Value Witness Table
+
+Regardless of whether the `Drawable` object exists on the stack or the heap, we're going to need a way to manage the life-time of the object. The is done through the value witness table, which takes care of the allocation, memory-copy, tear-down, and destruction of the object. There's one copy of the value witness table per type, and can be referenced through the existential container via its fourth word.
+
+```
+     Line : Drawable                   Line : Drawable VWT
+ _______________________             _______________________
+||                     ||     |---->| allocate:             |
+||_____________________||     |     |_______________________|
+||     valueBuffer     ||     |     | copy:                 |
+||_____________________||     |     |_______________________|
+||                     ||     |     | destruct:             |
+||_____________________||     |     |_______________________|
+|  value witness table  |-----|     | deallocate:           |
+|_______________________|           |_______________________|
+|                       |
+|_______________________|
+
+```
+
+---
+## Protocol Witness Table
+
+Finally, to answer how the correct implementation of `draw()` gets called on `Point` & `Line`, we've arrived at protocol witness table - the last word of the existential container. The protocol witness table stores the addresses to the implementation of the contract as declared in a protocol, and is also one copy per type.
+
+```
+     Line : Drawable                    Line : Drawable PWT
+ ________________________             _______________________
+||                      ||     |---->| draw:                 |
+||______________________||     |     |_______________________|
+||     valueBuffer      ||     |
+||______________________||     |
+||                      ||     |
+||______________________||     | 
+|  value witness table  ||     | 
+|________________________|     |     
+| protocol witness table |-----|
+|________________________|
+
+```

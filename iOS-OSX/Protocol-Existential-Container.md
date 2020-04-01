@@ -39,11 +39,88 @@ drawables.append(Line(x1: 0, y1: 0, x2: 3, y2: 5))
 drawables.forEach { $0.draw() }
 ```
 The code above brings about 2 interesting questions:
-1. The `drawables` array can store elements of different sizes (ie, instances `Point` & `Line`) - very atypical design for collections that support random access. 
-How does it manage constant-time memory access with variable memory offsets?
+1. The `drawables` array can store elements of different sizes (ie, instances `Point` & `Line`) - very atypical for collections that support random access. How does it manage constant-time memory access with variable memory offsets?
 2. `Point` & `Line` each implements its own `draw()` method, so how does the correct `draw()` method get called?
 
 We're going to dissolve these mysteries.
 
 ---
 ## Existential Container
+
+As it turns out, our `drawable` array from the previous section doesn't actually store elements of different sizes. Instead, a protocol type is stored inside a fixed-sized memory container called the existential container. A existential container is an allocation of __5 Machine Words__, the first 3 of which are used as a __value buffer__ to store the contents of the concrete type:
+
+```
+  Existential Container                 Point : Drawable
+ _______________________             _______________________
+||                     ||           || x: 0                ||
+||_____________________||           ||_____________________||
+||     valueBuffer     ||           || y: 0                ||
+||_____________________||           ||_____________________||
+||                     ||           ||                     ||
+||_____________________||           ||_____________________||
+|                       |           |                       |
+|_______________________|           |_______________________|
+|                       |           |                       |
+|_______________________|           |_______________________|
+
+```
+Things seem to work out nicely for instances of `Point` - its coordinate (x,y) fits nicely into the value buffer, but what about instances of `Line`? For sure we're going to be needing more than 3 words to accommodate its coordinates. For instances unable to fit the value buffer, we resort to heap allocation and instead use the value buffer to manage its reference:
+
+```
+     Line : Drawable                          Heap
+ _______________________             _______________________
+||                     ||---------->| x1: 0                 |
+||_____________________||           |_______________________|
+||     valueBuffer     ||           | y1: 0                 |
+||_____________________||           |_______________________|
+||                     ||           | x2: 3                 |
+||_____________________||           |_______________________|
+|                       |           | y2: 5                 |
+|_______________________|           |_______________________|
+|                       |
+|_______________________|
+
+```
+Now that's quite a bit of added run-time overhead just to store a line (heap allocation & reference counting). Recall that we've allocated 5 words to the existential container - why don't we just make use of the other 2 words and avoid the extra work altogether? These 2 words are dedicated to their own purposes, and we'll look at them next.
+
+---
+## Value Witness Table
+
+Regardless of whether the `Drawable` object exists on the stack or the heap, we're going to need a way to manage the life-time of the object. The is done through the value witness table, which takes care of the allocation, memory-copy, tear-down, and destruction of the object. There's one copy of the value witness table per type, and can be referenced through the existential container via its fourth word.
+
+```
+     Line : Drawable                   Line : Drawable VWT
+ _______________________             _______________________
+||                     ||     |---->| allocate:             |
+||_____________________||     |     |_______________________|
+||     valueBuffer     ||     |     | copy:                 |
+||_____________________||     |     |_______________________|
+||                     ||     |     | destruct:             |
+||_____________________||     |     |_______________________|
+|  value witness table  |-----|     | deallocate:           |
+|_______________________|           |_______________________|
+|                       |
+|_______________________|
+
+```
+
+---
+## Protocol Witness Table
+
+Finally, to answer how the correct implementation of `draw()` gets called on `Point` & `Line`, we've arrived at protocol witness table - the last word of the existential container. The protocol witness table stores the addresses to the implementation of the contract as declared in a protocol, and is also one copy per type.
+
+```
+     Line : Drawable                    Line : Drawable PWT
+ ________________________             _______________________
+||                      ||     |---->| draw:                 |
+||______________________||     |     |_______________________|
+||     valueBuffer      ||     |
+||______________________||     |
+||                      ||     |
+||______________________||     | 
+|  value witness table  ||     | 
+|________________________|     |     
+| protocol witness table |-----|
+|________________________|
+
+```

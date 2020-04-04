@@ -88,7 +88,7 @@ There. We've not only implemented our first property wrapper, but also gained a 
 ---
 ## A Practical Property Wrapper
 
-In the [Reference & Value Semantics](References-And-Values.md) chapter, we touched on using copy-on-write to preserve semantic consistency among value & reference types and to avoid excessive memory allocation with value types. Imagine the amount of boilerplate code we need to write if we need to attach copy-on-write behavior to many of our properties - what a hassle. Let's use a property wrapper to encapsulate copy-on-write.
+In the [Reference & Value Semantics](References-And-Values.md) chapter, we touched on using [Copy-On-Write](References-And-Values.md#Copy-On-Write) to preserve semantic consistency among value & reference types and to avoid excessive memory allocation with value types. Imagine the amount of boilerplate code we need to write if we need to attach copy-on-write behavior to many of our properties - what a hassle. Let's use a property wrapper to encapsulate copy-on-write.
 
 ```Swift
 protocol Copyable: AnyObject {

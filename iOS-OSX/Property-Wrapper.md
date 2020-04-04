@@ -167,6 +167,5 @@ struct Clamping<V: Comparable> {
 }
 ```
 
-More Resources:
 
-https://github.com/apple/swift-evolution/blob/master/proposals/0258-property-wrappers.md#property-wrapper-types-in-the-wild
+More Resources at [apple/swift-evolution/property-wrappers](https://github.com/apple/swift-evolution/blob/master/proposals/0258-property-wrappers.md)

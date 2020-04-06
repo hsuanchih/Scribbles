@@ -124,3 +124,52 @@ Finally, to answer how the correct implementation of `draw()` gets called on `Po
 |________________________|
 
 ```
+That's straightforward enough. But what if `Line` conforms to more than one protocol? Let's add another protocol declaration `GeometricAttribute` with property `length`, and have `Line` conform to the protocol.
+
+```Swift
+protocol GeometricAttribute {
+    var length : Double { get }
+}
+
+protocol Drawable {
+    func draw()
+}
+
+struct Line {
+    let x1, y1, x2, y2 : Double
+}
+
+extension Line : Drawable {
+    func draw() {
+        // Draw a line
+    }
+}
+
+extension Line : GeometricAttribute {
+    var length: Double {
+        return sqrt(pow(x2-x1, 2)+pow(y2-y1, 2))
+    }
+}
+
+let line : GeometricAttribute = Line(x1: 0, y1: 0, x2: 3, y2: 5)
+```
+
+What would the protocol witness table look like now?
+
+```
+Line : 
+Drawable, GeometricAttribute                    
+ ________________________             _______________________
+||                      ||     |---->| draw:                 |  Line : Drawable PWT
+||______________________||     |     |_______________________|
+||     valueBuffer      ||     |     | length:               |  Line : GeometricAttribute
+||______________________||     |     |_______________________|
+||                      ||     |
+||______________________||     | 
+|  value witness table  ||     | 
+|________________________|     |     
+| protocol witness table |-----|
+|________________________|
+
+```
+We would have 2 protocol witness tables in the lookup. Here `length` is a computed property, and equivalently represented as a method with no parameters.

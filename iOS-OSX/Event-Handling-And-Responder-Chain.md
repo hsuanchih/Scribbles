@@ -1,4 +1,4 @@
-# Event-Handling & Responder-Chain
+# Event-Handling & Responder Chain
 ---
 
 We know that when we add a [button](https://developer.apple.com/documentation/uikit/uibutton) to a [view controller](https://developer.apple.com/documentation/uikit/uiviewcontroller)'s [view](https://developer.apple.com/documentation/uikit/uiviewcontroller/1621460-view) or some [view](https://developer.apple.com/documentation/uikit/uiview) and wire up a [target-action](https://developer.apple.com/library/archive/documentation/General/Conceptual/Devpedia-CocoaApp/TargetAction.html#//apple_ref/doc/uid/TP40009071-CH3), our action method ends up getting called when the user taps on the button. 

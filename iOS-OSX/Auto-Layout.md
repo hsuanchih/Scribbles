@@ -11,7 +11,9 @@ The application manages the layout cycle on its main run loop as follows:
 2. Check for constraints changes
 3. If constraints have changed, schedule a deferred layout pass
 
-<img src="images/layout-cycle.png" height="260"/>
+<img src="images/layout-cycle.png" height="280"/>
+
+Image from [Presentation Slides, WWDC 2015, Session 219](https://devstreaming-cdn.apple.com/videos/wwdc/2015/219u3bqgvsz2g/219/219_mysteries_of_auto_layout_part_2.pdf?dl=1)
 
 ---
 ## Registering Constraint Changes
@@ -30,14 +32,14 @@ The deferred layout pass consists of 2 passes - the update pass & the layout pas
 The intention of the update pass is to register constraint changes for current layout pass. The layout engine traverses the view hierarchy, calling:
 
 * [`updateViewConstraints()`](https://developer.apple.com/documentation/uikit/uiviewcontroller/1621379-updateviewconstraints) on [`UIViewController`](https://developer.apple.com/documentation/uikit/uiviewcontroller)
-* [`updateConstraints()`](https://developer.apple.com/documentation/uikit/uiview/1622512-updateconstraints) on each [UIView](https://developer.apple.com/documentation/uikit/uiview)
+* [`updateConstraints()`](https://developer.apple.com/documentation/uikit/uiview/1622512-updateconstraints) on each [`UIView`](https://developer.apple.com/documentation/uikit/uiview)
 
 ### The Layout Pass:
 
 Finally, the layout pass reposition affected views by assigning new dimensions & coordinates. In this pass, the layout engine traverses the view hierarchy, calling:
 
 * [`viewWillLayoutSubviews()`](https://developer.apple.com/documentation/uikit/uiviewcontroller/1621437-viewwilllayoutsubviews) on [`UIViewController`](https://developer.apple.com/documentation/uikit/uiviewcontroller)
-* [`layoutSubviews()`](https://developer.apple.com/documentation/uikit/uiview/1622482-layoutsubviews) on each [UIView](https://developer.apple.com/documentation/uikit/uiview)
+* [`layoutSubviews()`](https://developer.apple.com/documentation/uikit/uiview/1622482-layoutsubviews) on each [`UIView`](https://developer.apple.com/documentation/uikit/uiview)
 
 ---
 ## PreEmpting the Deferred Layout Pass
@@ -47,6 +49,7 @@ What can I do if I want to effect my layout changes right away instead of waitin
 * Call [`UIView`](https://developer.apple.com/documentation/uikit/uiview)'s [`setNeedsUpdateConstraints()`](https://developer.apple.com/documentation/uikit/uiview/1622450-setneedsupdateconstraints) to trigger an update + layout pass
 * Call [`UIView`](https://developer.apple.com/documentation/uikit/uiview)'s' [`setNeedsLayout()`](https://developer.apple.com/documentation/uikit/uiview/1622601-setneedslayout) to trigger a layout pass
 
+---
 ## Wrapping Up
 
 __Constraint Updates:__

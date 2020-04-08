@@ -25,24 +25,61 @@ Keep this overview in mind as it will form the foundation of our exploration in 
 ---
 ## Publisher
 
+Before we get into concrete publisher types, let's first have a look at the contract a publisher will need to fulfill:
 ```Swift
 protocol Publisher {
+
+    // A concrete publisher must specify its:
+    // 1. Output type
+    // 2. Failure type - if the publisher never fails, its failure type can be declared Never
     associatedType Output
     associatedType Failure : Error
     
-    func subscribe<S>(_ subscriber: S) where S : Subscriber, Self.Failure == S.Failure, Self.Output == S.Input
+    // A subscriber calls subscribe on the publisher to register its interest for the publisher
+    // The constraints here specifies that: 
+    // 1. The subscriber's input type must match the publisher's output type
+    // 2. The subscriber's & publisher's error types must also match
+    func subscribe<S>(_ subscriber: S) 
+    where S : Subscriber, Self.Failure == S.Failure, Self.Output == S.Input
+    
+    // Attaches the specified subscriber to this publisher.
+    func receive<S>(subscriber: S) 
+    where S : Subscriber, Self.Failure == S.Failure, Self.Output == S.Input
+    
+    // Attaches the specified subject to this publisher.
+    func subscribe<S>(_ subject: S) -> AnyCancellable 
+    where S : Subject, Self.Failure == S.Failure, Self.Output == S.Output
 }
 ```
+The associated types are straightforward, but what should the body of `func subscribe<S>(_ subscriber: S)`, `func receive<S>(subscriber: S)`, and `func subscribe<S>(_ subject: S) -> AnyCancellable` look like? And what is a subject anyway? We'll touch on all of these one at a time, but let's start with some default implementations in the `Publisher` protocol extension:
 
 ```Swift
-extension NotificationCenter {
-    struct Publisher : Combine.Publisher {
-        typealias Output = Notification
-        typealias Failure = Never
-        init(center: NotificationCenter, name: Notification.Name, object: Any? = nil)
+extension Publisher {
+    public func subscribe<Subscriber: Combine.Subscriber>(_ subscriber: Subscriber) 
+    where Failure == Subscriber.Failure, Output == Subscriber.Input {
+        
+        // Call receive to attach the specified subscriber to this publisher
+        receive(subscriber: subscriber)
+    }
+
+    public func subscribe<Subject: Combine.Subject>(_ subject: Subject) -> AnyCancellable
+    where Failure == Subject.Failure, Output == Subject.Output {
+        
+        // Convert a subject into a subscriber
+        let subscriber = SubjectSubscriber(subject)
+        
+        // Call subscribe to attach the subscriber to the publisher
+        self.subscribe(subscriber)
+        
+        // Return a Cancellable object from the subscriber
+        return AnyCancellable(subscriber)
     }
 }
 ```
+That's a bit of clarity - the protocol extension provides default implementations for 2 of the 3 methods, leaving us with `func receive<S>(subscriber: S)`. There are a few concrete publisher types that come with Combine out-of-the-box. We'll have a peek under the hood to gain better intuition for how to implement our own.
+
+### Just:
+
 ---
 ## Subscriber
 
@@ -67,9 +104,3 @@ extension Subscribers {
 ```
 ---
 ## Operator
-
-```Swift
-extension Publishers {
-
-}
-```

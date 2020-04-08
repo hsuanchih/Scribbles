@@ -85,6 +85,63 @@ That's a bit of clarity - the protocol extension provides default implementation
 
 ### Just:
 
+`Just` is a publisher that emits one value to each subscriber before it completes. Let's see how it can be implemented: 
+
+```Swift
+extension Just {
+
+    // Define reference type Inner that is the subscription binding the publisher & subscriber
+    private final class Inner<Downstream: Subscriber> : Subscription
+        where Downstream.Input == Output
+    {
+        private var downstream: Downstream?
+        private let value: Output
+
+        fileprivate init(value: Output, downstream: Downstream) {
+            self.downstream = downstream
+            self.value = value
+        }
+        
+        // The subscriber calls request on the subscription to kick-off the emission 
+        func request(_ demand: Subscribers.Demand) {
+            guard let downstream = self.downstream else { return }
+            self.downstream = nil
+            
+            // Call receive on the subscriber with value
+            _ = downstream.receive(value)
+            
+            // Call receive on the subscriber with completion as Just is a one-off publisher
+            downstream.receive(completion: .finished)
+        }
+
+        func cancel() {
+            downstream = nil
+        }
+    }
+}
+
+// Implementation of Just
+public struct Just<Output>: Publisher {
+
+    // Just never fails
+    public typealias Failure = Never
+    public let output: Output
+
+    // An initializer with the value to be emitted to the subscriber
+    public init(_ output: Output) {
+        self.output = output
+    }
+
+    public func receive<Downstream: Subscriber>(subscriber: Downstream)
+        where Downstream.Input == Output, Downstream.Failure == Never
+    {
+        // Call receive on the subscriber, passing over the subscription
+        subscriber.receive(subscription: Inner(value: output, downstream: subscriber))
+    }
+}
+```
+(Snippet from [OpenCombine](https://github.com/broadwaylamb/OpenCombine/blob/master/Sources/OpenCombine/Publishers/Just.swift))
+
 ---
 ## Subscriber
 

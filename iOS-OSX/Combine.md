@@ -5,13 +5,14 @@ A lot of the times we're interested in receiving updates about value and state c
 ## Fundamental Building Blocks
 
 Let's first establish some terminology forming the fundamental building blocks of combine:
-* __Publisher__ - Party responsible for defining how values/errors are produced, but not necessarily the content producer itself
-* __Subscriber__ - Party interested in the value changes, and expresses its interest by subscribing to a publisher
+* __Subscription__ - Entity representing the connection of s subscriber to a publisher
+* __Publisher__ - Entity responsible for defining how values/errors are produced, but not necessarily the content producer itself
+* __Subscriber__ - Entity interested in the value changes, and expresses its interest by subscribing to a publisher
 * __Operator__
 
 ## Logical Overview
 
-On the one hand we have a publisher that can publish events over time, and on the other, a subscriber that is interested in knowing about these events - how do we connect them together? This connection is established through a third party called a subscription. Here's a step-by-step on how it happens:
+On the one hand we have a publisher that can publish events over time, and on the other, a subscriber that is interested in knowing about these events - how do we connect them together? This connection is established through a third entity called a subscription. Here's a step-by-step on how it happens:
 
 <img src="images/combine-publisher-subscriber.png" height="420"/>
 
@@ -21,6 +22,9 @@ On the one hand we have a publisher that can publish events over time, and on th
 4. Publisher continues to publish events to the subscriber until either the terms of the subscription is fulfilled or an error ocurrs.
 
 Keep this overview in mind as it will form the foundation of our exploration in this chapter. 
+
+---
+## Subscription
 
 ---
 ## Publisher
@@ -81,66 +85,7 @@ extension Publisher {
     }
 }
 ```
-That's a bit of clarity - the protocol extension provides default implementations for 2 of the 3 methods, leaving us with `func receive<S>(subscriber: S)`. There are a few concrete publisher types that come with Combine out-of-the-box. We'll have a peek under the hood to gain better intuition for how to implement our own.
-
-### Just:
-
-`Just` is a publisher that emits one value to each subscriber before it completes. Let's see how it can be implemented: 
-
-```Swift
-extension Just {
-
-    // Define reference type Inner that is the subscription binding the publisher & subscriber
-    private final class Inner<Downstream: Subscriber> : Subscription
-        where Downstream.Input == Output
-    {
-        private var downstream: Downstream?
-        private let value: Output
-
-        fileprivate init(value: Output, downstream: Downstream) {
-            self.downstream = downstream
-            self.value = value
-        }
-        
-        // The subscriber calls request on the subscription to kick-off the emission 
-        func request(_ demand: Subscribers.Demand) {
-            guard let downstream = self.downstream else { return }
-            self.downstream = nil
-            
-            // Call receive on the subscriber with value
-            _ = downstream.receive(value)
-            
-            // Call receive on the subscriber with completion as Just is a one-off publisher
-            downstream.receive(completion: .finished)
-        }
-
-        func cancel() {
-            downstream = nil
-        }
-    }
-}
-
-// Implementation of Just
-public struct Just<Output>: Publisher {
-
-    // Just never fails
-    public typealias Failure = Never
-    public let output: Output
-
-    // An initializer with the value to be emitted to the subscriber
-    public init(_ output: Output) {
-        self.output = output
-    }
-
-    public func receive<Downstream: Subscriber>(subscriber: Downstream)
-        where Downstream.Input == Output, Downstream.Failure == Never
-    {
-        // Call receive on the subscriber, passing over the subscription
-        subscriber.receive(subscription: Inner(value: output, downstream: subscriber))
-    }
-}
-```
-(Snippet from [OpenCombine](https://github.com/broadwaylamb/OpenCombine/blob/master/Sources/OpenCombine/Publishers/Just.swift))
+That's a bit of clarity - the protocol extension provides default implementations for 2 of the 3 methods, leaving us with `func receive<S>(subscriber: S)`. If you remember the logical overview from earlier this is where the publisher sends the subscription over to the subscriber.
 
 ---
 ## Subscriber

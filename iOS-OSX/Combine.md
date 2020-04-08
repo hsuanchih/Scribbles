@@ -40,30 +40,35 @@ protocol Publisher {
     // 1. The subscriber's input type must match the publisher's output type
     // 2. The subscriber's & publisher's error types must also match
     func subscribe<S>(_ subscriber: S) 
-    where S : Subscriber, Self.Failure == S.Failure, Self.Output == S.Input
+        where S : Subscriber, Self.Failure == S.Failure, Self.Output == S.Input
     
     // Attaches the specified subscriber to this publisher.
     func receive<S>(subscriber: S) 
-    where S : Subscriber, Self.Failure == S.Failure, Self.Output == S.Input
+        where S : Subscriber, Self.Failure == S.Failure, Self.Output == S.Input
     
     // Attaches the specified subject to this publisher.
     func subscribe<S>(_ subject: S) -> AnyCancellable 
-    where S : Subject, Self.Failure == S.Failure, Self.Output == S.Output
+        where S : Subject, Self.Failure == S.Failure, Self.Output == S.Output
 }
 ```
-The associated types are straightforward, but what should the body of `func subscribe<S>(_ subscriber: S)`, `func receive<S>(subscriber: S)`, and `func subscribe<S>(_ subject: S) -> AnyCancellable` look like? And what is a subject anyway? We'll touch on all of these one at a time, but let's start with some default implementations in the `Publisher` protocol extension:
+The associated types are straightforward, but what should the body these look like? 
+* `func subscribe<S>(_ subscriber: S)`, 
+* `func receive<S>(subscriber: S)`, and 
+* `func subscribe<S>(_ subject: S) -> AnyCancellable` 
+
+And what is a subject anyway? We'll touch on all of these one at a time, but let's start with some default implementations in the `Publisher` protocol extension:
 
 ```Swift
 extension Publisher {
     public func subscribe<Subscriber: Combine.Subscriber>(_ subscriber: Subscriber) 
-    where Failure == Subscriber.Failure, Output == Subscriber.Input {
+        where Failure == Subscriber.Failure, Output == Subscriber.Input {
         
         // Call receive to attach the specified subscriber to this publisher
         receive(subscriber: subscriber)
     }
 
     public func subscribe<Subject: Combine.Subject>(_ subject: Subject) -> AnyCancellable
-    where Failure == Subject.Failure, Output == Subject.Output {
+        where Failure == Subject.Failure, Output == Subject.Output {
         
         // Convert a subject into a subscriber
         let subscriber = SubjectSubscriber(subject)

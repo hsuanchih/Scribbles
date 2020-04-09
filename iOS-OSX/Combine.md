@@ -26,6 +26,51 @@ Keep this overview in mind as it will form the foundation of our exploration in 
 ---
 ## Subscription
 
+It makes the most sense to kick-off our exploration with a subscription as it serves as the binding between a publisher & a subscriber. The `Subscription` protocol is one that all concrete subscription types must conform to. Let's look at the contract:
+
+```Swift
+protocol Subscription: Cancellable, CustomCombineIdentifierConvertible {
+
+    // A subscriber calls this method with a demand to let the publisher 
+    // know the number of values it may send to the subscriber
+    func request(_ demand: Subscribers.Demand)
+}
+```
+Succint, but we're introduced to a few new types here. Let's go over them one by one:
+```Swift
+// Cancellable protocol is an indicator that an activity/action supports cancellation
+protocol Cancellable {
+    // Call cancel on a concrete Cancellable type to cancel an action/activity.
+    func cancel()
+}
+
+// CustomCombineIdentifierConvertible protocol provides unique identifier to publisher streams
+// A default implementation comes with its protocol extension
+protocol CustomCombineIdentifierConvertible {
+    var combineIdentifier: CombineIdentifier { get }
+}
+extension CustomCombineIdentifierConvertible where Self: AnyObject {
+    public var combineIdentifier: CombineIdentifier {
+        return CombineIdentifier(self)
+    }
+}
+
+// A requested number of items, sent to a publisher from a subscriber through the subscription
+extension Subscribers {
+    struct Demand, Codable, CustomStringConvertible {
+    
+        // A subscriber can demand a limited number of elements to be sent
+        static func max(_ value: Int) -> Subscribers.Demand
+        
+        // A subscriber can demand an incessant number of elements to be sent
+        static let unlimited: Subscribers.Demand
+        
+        // A subscriber can demand no elements to be sent
+        static let none: Subscribers.Demand
+    }
+}
+```
+
 ---
 ## Publisher
 

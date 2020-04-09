@@ -27,6 +27,7 @@ Keep this overview in mind - we will use it as a foundation to re-implement a cu
 
 ---
 ## Subscription
+### The Background:
 
 It makes the most sense to kick-off our exploration with a subscription as it serves as the binding between a publisher & a subscriber. The `Subscription` protocol is one that all concrete subscription types must conform to. Let's look at the contract:
 
@@ -38,7 +39,9 @@ protocol Subscription: Cancellable, CustomCombineIdentifierConvertible {
     func request(_ demand: Subscribers.Demand)
 }
 ```
+
 Succint, but we're introduced to a few new types here. Let's go over them one by one:
+
 ```Swift
 // Cancellable protocol is an indicator that an activity/action supports cancellation
 protocol Cancellable {
@@ -72,7 +75,64 @@ extension Subscribers {
     }
 }
 ```
+### The Implementation:
 
+With all the background we need to implement a concrete subscription, let's make one - the `DecodedDataTaskSubscription`.
+
+```Swift
+class DecodedDataTaskSubscription<Output: Decodable, S: Subscriber>
+    where S.Input == Output, S.Failure == Error {
+    
+    private let urlRequest: URLRequest
+    private var subscriber: S?
+    
+    init(urlRequest: URLRequest, subscriber: S) {
+        self.urlRequest = urlRequest
+        self.subscriber = subscriber
+    }
+}
+
+extension DecodedDataTaskSubscription : Subscription {
+    
+    // Subscription protocol conformance
+    // A subscriber calls this method on the subscription with a demand to let the publisher
+    // know the number of values it may send to the subscriber
+    func request(_ demand: Subscribers.Demand) {
+        if demand > 0 {
+            URLSession.shared.dataTask(with: urlRequest) { [weak self] data, response, error in
+                defer { self?.cancel() }
+                
+                // Early return if subscription has been released
+                guard let `self` = self else { return }
+                
+                // Process data task error
+                // Publish completion event with error to subscriber
+                guard let data = data else {
+                    if let error = error {
+                        self.subscriber?.receive(completion: .failure(error))
+                    }
+                    return
+                }
+                
+                // Publish JSON decoded data to the subscriber followed by a completion event
+                // if decode is successful
+                // Publish completion event with decode error otherwise
+                do {
+                    self.subscriber?.receive(try JSONDecoder().decode(Output.self, from: data))
+                    self.subscriber?.receive(completion: .finished)
+                } catch {
+                    self.subscriber?.receive(completion: .failure(error))
+                }
+            }.resume()
+        }
+    }
+    
+    // Cancellable protocol conformance
+    func cancel() {
+        subscriber = nil
+    }
+}
+```
 ---
 ## Publisher
 

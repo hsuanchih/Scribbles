@@ -31,7 +31,7 @@ It makes the most sense to kick-off our exploration with a subscription as it se
 ```Swift
 protocol Subscription: Cancellable, CustomCombineIdentifierConvertible {
 
-    // A subscriber calls this method with a demand to let the publisher 
+    // A subscriber calls this method on the subscription with a demand to let the publisher 
     // know the number of values it may send to the subscriber
     func request(_ demand: Subscribers.Demand)
 }

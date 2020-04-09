@@ -16,12 +16,14 @@ On the one hand we have a publisher that can publish events over time, and on th
 
 <img src="images/combine-publisher-subscriber.png" height="420"/>
 
+Image from [Presentation Slides, WWDC 2019, Session 722](https://devstreaming-cdn.apple.com/videos/wwdc/2019/722l6blhn0efespfgx/722/722_introducing_combine.pdf?dl=1)
+
 1. The subscriber expresses its interest in events from the publisher by subscribing itself.
 2. In turn the publisher creates a subscription sends it to the subscriber.
 3. The subscriber requests a number of values from the subscription before it begins to receive events.
 4. Publisher continues to publish events to the subscriber until either the terms of the subscription is fulfilled or an error ocurrs.
 
-Keep this overview in mind as it will form the foundation of our exploration in this chapter. 
+Keep this overview in mind - we will use it as a foundation to re-implement a custom version of `URLSession.DataTaskPublisher` taking the examples from [Donny Wals' post on Understanding Combine’s publishers and subscribers](https://www.donnywals.com/understanding-combines-publishers-and-subscribers/).
 
 ---
 ## Subscription

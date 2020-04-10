@@ -73,6 +73,7 @@ extension Publisher where Failure == Never {
 }
 ```
 (Snippet from [OpenCombine](https://github.com/broadwaylamb/OpenCombine/blob/master/Sources/OpenCombine/Subscribers/Subscribers.Assign.swift))
+
 ---
 ## Sink
 

@@ -72,7 +72,7 @@ extension Subscribers {
         }
 
         // The subscriber receives a subscription
-        // 1. If the subscriber is currently subscribed or the subscriber has been cancelled:
+        // 1. If the subscriber is currently subscribed or the previous subscription has been cancelled:
         //    the received subscription will be cancelled
         // 2. If the subscriber is awaiting a subscription:
         //    the received subscription is accepted, and the subscriber makes a request for 
@@ -103,12 +103,12 @@ extension Subscribers {
         
         // The subscriber receives a completion event
         // Subscribers.Assign never fails & ignores the completion event altogether
-        // The subscriber is cancelled when the completion event is received nonetheless
+        // The subscription is cancelled when the completion event is received nonetheless
         public func receive(completion: Subscribers.Completion<Never>) {
             cancel()
         }
 
-        // Call cancel to cancel the subscriber
+        // Call cancel to cancel the subscription
         // If the subscriber is currently susbcribed, cancel the subscription and move
         // SubscriptionStatus to terminated
         public func cancel() {
@@ -204,7 +204,7 @@ extension Subscribers {
         }
 
         // The subscriber receives a subscription
-        // 1. If the subscriber is currently subscribed or the subscriber has been cancelled:
+        // 1. If the subscriber is currently subscribed or the previous subscription has been cancelled:
         //    the received subscription will be cancelled
         // 2. If the subscriber is awaiting a subscription:
         //    the received subscription is accepted, and the subscriber makes a request for 
@@ -233,7 +233,7 @@ extension Subscribers {
             status = .terminal
         }
 
-        // Call cancel to cancel the subscriber
+        // Call cancel to cancel the subscription
         // If the subscriber is currently susbcribed, cancel the subscription and move
         // SubscriptionStatus to terminated
         public func cancel() {
@@ -257,7 +257,7 @@ extension Publisher {
 
         // 1. Create a Subscribers.Sink subscriber using its default initializer
         // 2. Subscribe to the puslisher passing in the subscriber object
-        // 3. Return the subscriber object wrapped as AnyCancellable
+        // 3. Return the subscriber object wrapped in a AnyCancellable type
         let subscriber = Subscribers.Sink<Output, Failure>(
             receiveCompletion: receiveCompletion,
             receiveValue: receiveValue
@@ -278,7 +278,7 @@ extension Publisher where Failure == Never {
         // 1. Create a Subscribers.Sink subscriber using its default initializer, passing
         //    a no-action completion event handler as default value
         // 2. Subscribe to the puslisher passing in the subscriber object
-        // 3. Return the subscriber object wrapped as AnyCancellable
+        // 3. Return the subscriber object wrapped in a AnyCancellable type
         let subscriber = Subscribers.Sink<Output, Failure>(
             receiveCompletion: { _ in },
             receiveValue: receiveValue

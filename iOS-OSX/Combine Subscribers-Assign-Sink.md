@@ -7,7 +7,7 @@ We learned the basics of subscribers in [Combine - Publisher, Subscriber & Subsc
 ---
 ## Subscribers.Assign
 
-`Subscribers.Assign` is subscriber intended for assigning a publisher’s output to a property of an object. Let's see an example of how it's used before we go into how it works.
+`Subscribers.Assign` is subscriber intended for assigning a publisher’s output to a property of an object. Let's see an example of how it's used before we break down how it works.
 
 ```Swift
 // A ValuePrinter prints its value to the console

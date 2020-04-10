@@ -1,7 +1,42 @@
 # Combine Subscribers - Assign & Sink
 
+We learned the basics of subscribers in [Combine - Publisher, Subscriber & Subscription](iOS-OSX/Combine-Publisher-Subscriber-Subscription.md) and implemented our own. Here we're extending our discussion on subscribers by looking at two concrete subscriber types that come with Combine:
+* `Subscribers.Assign`
+* `Subscribers.Sink`
+
 ---
 ## Assign
+
+`Subscribers.Assign` is subscriber capable of assigning a publisher’s output to a property of an object. Let's see an example of how it's used before we go into how it works.
+
+```Swift
+// A ValuePrinter prints its value to the console
+class ValuePrinter<Value> {
+    var value: Value {
+        didSet {
+            print(value)
+        }
+    }
+    init(_ value: Value) {
+        self.value = value
+    }
+}
+
+// Here we define a publisher that publishes values from 1 to 5
+// and register to it a subscriber of type Assign, who then writes
+// the values received to the ValuePrinter's value property
+Array(1...5).publisher.assign(to: \.value, on: ValuePrinter(0))
+
+
+// As expected, the console outputs:
+// 1
+// 2
+// 3
+// 4
+// 5
+```
+
+Now let's look at the implementation of `Subscribers.Assign`.
 
 ```Swift
 enum SubscriptionStatus {

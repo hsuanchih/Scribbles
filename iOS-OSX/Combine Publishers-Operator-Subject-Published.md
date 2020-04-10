@@ -1,4 +1,4 @@
-# Combine Publishers - Operator, Subject & @Published
+# Combine Publishers - Operator, Subject & Published
 
 ---
 ## Operator
@@ -7,4 +7,4 @@
 ## Subject
 
 ---
-## @Published
+## Published

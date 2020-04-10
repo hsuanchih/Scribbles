@@ -10,7 +10,7 @@ We learned the basics of subscribers in [Combine - Publisher, Subscriber & Subsc
 `Subscribers.Assign` is subscriber intended for assigning a publisher’s output to a property of an object. Let's see an example of how it's used before we break down how it works.
 
 ```Swift
-// A ValuePrinter prints its value to the console
+// A ValuePrinter prints its value to the console whenever its value changes
 class ValuePrinter<Value> {
     var value: Value {
         didSet {
@@ -141,7 +141,7 @@ extension Publisher where Failure == Never {
 (Snippet from [OpenCombine](https://github.com/broadwaylamb/OpenCombine/blob/master/Sources/OpenCombine/Subscribers/Subscribers.Assign.swift))
 
 ---
-## Sink
+## Subscribers.Sink
 
 ```Swift
 enum SubscriptionStatus {

@@ -30,7 +30,7 @@ Keep this overview in mind - we will use it as a foundation to re-implement a cu
 ## Subscriber
 ### The Background:
 
-Of all the entities involved in the event chain, the subscriber is probably the most apparent. We'll start from the sink of the chain and work our way back to the source. Let's start with the `Subscriber` protocol to get a better idea of the contract fulfilled by a concrete subscriber:
+Of all the entities involved in the event chain, the subscriber is probably the most apparent. We'll start from the sink of the chain and work our way back to the source. Let's start with the `Subscriber` protocol to get a better idea of the contract that needs to be fulfilled by a concrete subscriber:
 
 ```Swift
 protocol Subscriber {

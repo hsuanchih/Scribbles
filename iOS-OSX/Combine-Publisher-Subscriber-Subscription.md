@@ -1,15 +1,14 @@
-# Combine
+# Combine - Publisher, Subscriber & Subscription
 
-A lot of the times we're interested in receiving updates about value and state changes over time. In the past we've relied on delegation, callbacks/closures, and notifications (NotificationCenter/Key-Value-Observation) to get it done. Today we're going to look at the publisher/subscriber mechanism through Combine.
+A lot of the times we're interested in receiving updates about value and state changes over time. In the past we've relied on delegation, callbacks/closures, and notifications (NotificationCenter/Key-Value-Observation) to get it done. Today we're going to look at the publisher/subscriber pattern through Combine.
 
 ---
 ## Fundamental Building Blocks
 
 Let's first establish some terminology forming the fundamental building blocks of combine:
+* __Subscriber__ - Entity interested in the value changes, and expresses its interest by subscribing to a publisher
 * __Subscription__ - Entity representing the connection of s subscriber to a publisher
 * __Publisher__ - Entity responsible for defining how values/errors are produced, but not necessarily the content producer itself
-* __Subscriber__ - Entity interested in the value changes, and expresses its interest by subscribing to a publisher
-* __Operator__
 
 ---
 ## Logical Overview
@@ -87,6 +86,10 @@ Below implements a concrete subscriber `DecodableDataTaskSubscriber` capable of 
 class DecodableDataTaskSubscriber<Input: Decodable>: Subscriber {
     typealias Failure = Error
     
+    // Typically, the subscriber holds on to the subscription so that
+    // it can cancel the subscription later
+    private var subscription: Subscription?
+    
     // Subscriber receives a subscription, demand unlimited event streams 
     // from the subscription
     func receive(subscription: Subscription) {
@@ -103,6 +106,13 @@ class DecodableDataTaskSubscriber<Input: Decodable>: Subscriber {
     // Subscriber receives the completion event
     func receive(completion: Subscribers.Completion<Error>) {
         print("Request completed with: \(completion)")
+        cancel()
+    }
+    
+    // Use the cancel method to cancel the subscription
+    func cancel() {
+        subscription?.cancel()
+        subscription = nil
     }
 }
 ```
@@ -166,6 +176,7 @@ extension DecodedDataTaskSubscription : Subscription {
     // know the number of values it may send to the subscriber
     func request(_ demand: Subscribers.Demand) {
         if demand > 0 {
+            urlRequest.setValue("application/json", forHTTPHeaderField: "Content-Type")
             URLSession.shared.dataTask(with: urlRequest) { [weak self] data, response, error in
                 defer { self?.cancel() }
                 
@@ -286,4 +297,34 @@ struct DecodedDataTaskPublisher<Output: Decodable>: Publisher {
 }
 ```
 ---
-## Operator
+## Putting Everything Together
+
+It's time to put the pieces together and see how a publisher, subscription, and subscriber work in tandem.
+
+```Swift
+// In this example we're going to have the publisher DecodedDataTaskPublisher publish facts about the number 7 taken
+// from numbersapi to the subscriber DecodableDataTaskSubscriber
+
+// Define response data model NumberModel
+struct NumberModel: Decodable {
+    let text : String
+    let number : Double
+    let type : String
+}
+
+// Declare a publisher with data source: "http://numbersapi.com/7" and output type NumberModel
+let publisher = DecodedDataTaskPublisher<NumberModel>(urlRequest: URLRequest(url: URL(string: "http://numbersapi.com/7")!))
+
+// Declare a subscriber with matching input type NumberModel
+let subscriber = DecodableDataTaskSubscriber<NumberModel>()
+
+// Subscribe to the publisher with the subscriber
+publisher.subscribe(subscriber)
+
+
+// Console Output:
+// ---------------------
+// Received subscription
+// Received value: NumberModel(text: "7 is the number of days in a week.", number: 7.0, type: "trivia")
+// Received completion finished
+```

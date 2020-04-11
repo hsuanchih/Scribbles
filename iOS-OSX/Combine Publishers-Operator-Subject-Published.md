@@ -124,35 +124,28 @@ extension Publisher {
 ---
 ## Subject
 
+A subject is a publisher that offers methods to outside callers, allowing them to publish values & events. The way a subject achieves this is by conforming to the `Subject` protocol. Concrete subjects that come out-of-the-box with Combine are `CurrentValueSubject` and `PassthroughSubject`.
 
+We are going to look at the `Subject` protocol as a warm up to understanding the `PassthroughSubject` implementation.
 
 ```Swift
-/// A publisher that exposes a method for outside callers to publish elements.
-///
-/// A subject is a publisher that you can use to ”inject” values into a stream, by calling
-/// its `send()` method. This can be useful for adapting existing imperative code to the
-/// Combine model.
 protocol Subject: AnyObject, Publisher {
 
-    /// Sends a value to the subscriber.
-    ///
-    /// - Parameter value: The value to send.
+    // Sends a value to the subscriber.
     func send(_ value: Output)
 
-    /// Sends a completion signal to the subscriber.
-    ///
-    /// - Parameter completion: A `Completion` instance which indicates whether publishing
-    ///   has finished normally or failed with an error.
+    // Sends a completion event to the subscriber.
     func send(completion: Subscribers.Completion<Failure>)
 
-    /// Provides this Subject an opportunity to establish demand for any new upstream
-    /// subscriptions (say, via `Publisher.subscribe<S: Subject>(_: Subject)`)
+    // Provides this Subject an opportunity to establish demand for any new upstream
+    // subscriptions
     func send(subscription: Subscription)
 }
 
 extension Subject where Output == Void {
 
-    /// Signals subscribers.
+    // If the output of the publisher is void, 
+    // the send(_ value: Output) method should sends a void
     public func send() {
         send(())
     }
@@ -160,6 +153,7 @@ extension Subject where Output == Void {
 ```
 (Snippet from [OpenCombine](https://github.com/broadwaylamb/OpenCombine/blob/master/Sources/OpenCombine/Subject.swift))
 
+Now let's see the implementation for `PassthroughSubject`.
 
 ```Swift
 public final class PassthroughSubject<Output, Failure: Error>: Subject  {

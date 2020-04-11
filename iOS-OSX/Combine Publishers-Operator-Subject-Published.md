@@ -119,9 +119,12 @@ extension Publisher {
     }
 }
 ```
+(Snippet from [OpenCombine](https://github.com/broadwaylamb/OpenCombine/blob/master/Sources/OpenCombine/Publishers/Publishers.Map.swift))
 
 ---
 ## Subject
+
+
 
 ```Swift
 /// A publisher that exposes a method for outside callers to publish elements.

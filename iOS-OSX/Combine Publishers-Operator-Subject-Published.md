@@ -1,7 +1,11 @@
 # Combine Publishers - Operator, Subject & \@Published
 
+Here we're building on [Combine - Publisher, Subscriber & Subscription](iOS-OSX/Combine-Publisher-Subscriber-Subscription.md) to solidify our understanding of Combine by looking at some practical examples of publishers. Specifically, we'll explore implementations of an operator, a subject, and the \@Published property wrapper.
+
 ---
 ## Operator
+
+Operators are special kinds of publishers in that they manipulate data received from the upstream to produce new data to the downstream. There are a lot of operators at our disposal. However our focus is here more on understanding how they work and not how they're used, so [here's a detailed list of all operators and when to use them](https://developer.apple.com/documentation/combine/publishers). What we'll do here instead is pick one from the list and look at how it does what it does.
 
 ---
 ## Subject

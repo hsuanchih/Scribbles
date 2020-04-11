@@ -7,6 +7,119 @@ Here we're building on [Combine - Publisher, Subscriber & Subscription](iOS-OSX/
 
 Operators are special kinds of publishers in that they manipulate data received from the upstream to produce new data to the downstream. There are a lot of operators at our disposal. However our focus is here more on understanding how they work and not how they're used, so [here's a detailed list of all operators and when to use them](https://developer.apple.com/documentation/combine/publishers). What we'll do here instead is pick one from the list and look at how it does what it does.
 
+Let's pick `Publishers.Map` as our example, and start with an example of how we use this operator.
+
+```Swift
+// Here we define a publisher that publishes values from 1 to 5,
+// and pipes its downstream with a Publishers.Map operator.
+// The operator transforms the output of the publisher by squaring the values it produces.
+
+// Finally we attach a subscriber of type Sink which outputs:
+// "Completed with:" with a Subscribers.Completion instance when a completion event is received, or
+// "Received value:" with the value received when a value is received
+Array(1...5).publisher.map { $0*$0 }.sink(receiveCompletion: { print("Completed with: \($0)") })
+    { print("Received value: \($0)") }
+```
+Now let's see how the `Publishers.Map` operator does what it does:
+
+```Swift
+extension Publishers {
+    
+    public struct Map<Upstream: Publisher, Output>: Publisher {
+        
+        // This publisher's failure type must match its upstream
+        public typealias Failure = Upstream.Failure
+
+        // The publisher from which this publisher receives elements.
+        public let upstream: Upstream
+
+        // The closure that transforms elements from the upstream publisher.
+        public let transform: (Upstream.Output) -> Output
+
+        // This publisher's initializer requires:
+        // 1. Another publisher that is its upstream
+        // 2. A closure that defines how values from the upstream should be transformed
+        public init(upstream: Upstream,
+                    transform: @escaping (Upstream.Output) -> Output) {
+            self.upstream = upstream
+            self.transform = transform
+        }
+        
+        // Publisher protocol conformance:
+        // When the subscriber calls subscribe on this publisher passing itself as the subscriber,
+        // this publisher wraps the subscriber (alongside the transformation closure) inside another 
+        // subscriber type Inner, and calls subscribe on its upstream, this time passing the Inner
+        // instance as parameter.
+        public func receive<Downstream: Subscriber>(subscriber: Downstream)
+            where Output == Downstream.Input, Downstream.Failure == Upstream.Failure {
+            upstream.subscribe(Inner(downstream: subscriber, map: transform))
+        }
+        
+        // This is convenience method for piping this operator with another map operator:
+        // A new Publisher.Map is created using its initializer
+        public func map<Result>(_ transform: @escaping (Output) -> Result) -> Publishers.Map<Upstream, Result> {
+            return .init(upstream: upstream) { transform(self.transform($0)) }
+        }
+    }
+}
+
+extension Publishers.Map {
+
+    // The Inner type is a subscriber that wraps its downstream
+    private struct Inner<Downstream: Subscriber> : Subscriber, CustomCombineIdentifierConvertible
+        where Downstream.Input == Output, Downstream.Failure == Upstream.Failure {
+        
+        // The subscriber's input & failure types must match its upstream
+        typealias Input = Upstream.Output
+        typealias Failure = Upstream.Failure
+        
+        // CustomCombineIdentifierConvertible protocol conformance
+        let combineIdentifier = CombineIdentifier()
+
+        // This subscriber manages:
+        // 1. The downstream subscriber
+        // 2. The value transformation
+        private let downstream: Downstream
+        private let map: (Input) -> Output
+        fileprivate init(downstream: Downstream, map: @escaping (Input) -> Output) {
+            self.downstream = downstream
+            self.map = map
+        }
+
+        // Subscriber protocol conformance:
+        func receive(subscription: Subscription) {
+        
+            // Forward subscription to its downstream when it receives
+            // one from its upstream
+            downstream.receive(subscription: subscription)
+        }
+        func receive(_ input: Input) -> Subscribers.Demand {
+            
+            // Apply transformation on the value received from upstream, 
+            // and forward it downstream
+            return downstream.receive(map(input))
+        }
+        func receive(completion: Subscribers.Completion<Failure>) {
+            
+            // Forward the completion event downstream
+            downstream.receive(completion: completion)
+        }
+    }
+}
+
+extension Publisher {
+    
+    // We can call map on the upstream publisher to attach a Publishers.Map publisher to it
+    // (like we did in our example)
+    public func map<Result>(_ transform: @escaping (Output) -> Result) -> Publishers.Map<Self, Result> {
+        
+        // Create a new Publisher.Map publisher, setting the called publisher as its upstream and passing
+        // in the transformation closure
+        return Publishers.Map(upstream: self, transform: transform)
+    }
+}
+```
+
 ---
 ## Subject
 

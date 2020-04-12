@@ -4,6 +4,7 @@ I'm starting a scratchpad to digest various concepts, starting with the basics &
 
 * [Auto Layout](iOS-OSX/Auto-Layout.md)
 * [Combine - Publisher, Subscriber & Subscription](iOS-OSX/Combine-Publisher-Subscriber-Subscription.md)
+* [Combine Publishers - Operator, Subject & @Published](iOS-OSX/Combine-Publishers-Operator-Subject-Published.md)
 * [Combine Subscribers - Assign & Sink](iOS-OSX/Combine-Subscribers-Assign-Sink.md)
 * [Concurrency, GCD & Operations](iOS-OSX/Concurrency-GCD-Operations.md)
 * [Event-Handling & Responder Chain](iOS-OSX/Event-Handling-And-Responder-Chain.md)

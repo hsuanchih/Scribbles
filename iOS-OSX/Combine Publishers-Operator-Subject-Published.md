@@ -158,38 +158,29 @@ Now let's see the implementation for `PassthroughSubject`.
 ```Swift
 public final class PassthroughSubject<Output, Failure: Error>: Subject  {
 
+    // Locking mechanism to enforce atomic operations
     private let _lock = UnfairRecursiveLock.allocate()
 
+    // This property tracks whether the subject has sent a completion event 
     private var _completion: Subscribers.Completion<Failure>?
 
-    // TODO: Combine uses bag data structure
+    // This list keeps subscriptions (upstream subscriptions) sent by the subject
+    internal var upstreamSubscriptions: [Subscription] = []
+    
+    // This list keeps subscriptions (downstream subscriptions) associated with subscribers
     private var _subscriptions: [Conduit] = []
 
-    internal var upstreamSubscriptions: [Subscription] = []
-
+    // This property tracks whether the subject has received a demand from any downstream 
+    // subscriber
     internal var hasAnyDownstreamDemand = false
-
+    
+    // Default initializer with no parameters
     public init() {}
 
-    deinit {
-        for subscription in _subscriptions {
-            subscription._downstream = nil
-        }
-        _lock.deallocate()
-    }
-
-    public func send(subscription: Subscription) {
-        _lock.do {
-            upstreamSubscriptions.append(subscription)
-            if hasAnyDownstreamDemand {
-                subscription.request(.unlimited)
-            }
-        }
-    }
-
+    // Publisher protocol conformance
+    // 
     public func receive<Downstream: Subscriber>(subscriber: Downstream)
-        where Output == Downstream.Input, Failure == Downstream.Failure
-    {
+        where Output == Downstream.Input, Failure == Downstream.Failure {
         _lock.do {
             if let completion = _completion {
                 subscriber.receive(subscription: Subscriptions.empty)
@@ -205,6 +196,22 @@ public final class PassthroughSubject<Output, Failure: Error>: Subject  {
         }
     }
 
+    // Subject protocol conformance
+    // Call this method on the subject to send subscription to the subscriber
+    // Subscriptions injected are added to upstream subscriptions
+    // Injected subscriptions are requested unlimited demands regardless of demand
+    // requested by the downstream
+    public func send(subscription: Subscription) {
+        _lock.do {
+            upstreamSubscriptions.append(subscription)
+            if hasAnyDownstreamDemand {
+                subscription.request(.unlimited)
+            }
+        }
+    }
+    // Call this method on the subject to send values to each subscriber
+    // to send the value to all subscribers, and update each downstream subscription
+    // demand with ensuing demands returned from the subscriber  
     public func send(_ input: Output) {
         _lock.do {
             for subscription in _subscriptions
@@ -216,7 +223,8 @@ public final class PassthroughSubject<Output, Failure: Error>: Subject  {
             }
         }
     }
-
+    // Call this method on the subject to send completion event to each subscriber
+    // The subscription is no longer effective once the completion event is sent
     public func send(completion: Subscribers.Completion<Failure>) {
         _lock.do {
             _completion = completion
@@ -226,6 +234,8 @@ public final class PassthroughSubject<Output, Failure: Error>: Subject  {
         }
     }
 
+    // Downstream subscription call this method when subscriber request demand
+    // through it
     private func _acknowledgeDownstreamDemand() {
         _lock.do {
             guard !hasAnyDownstreamDemand else { return }
@@ -235,28 +245,42 @@ public final class PassthroughSubject<Output, Failure: Error>: Subject  {
             }
         }
     }
+    
+    // Release all downstream subscribers on deallocation
+    deinit {
+        for subscription in _subscriptions {
+            subscription._downstream = nil
+        }
+        _lock.deallocate()
+    }
 }
 
 extension PassthroughSubject {
 
+    // Conduit is a concrete subscription type
     fileprivate final class Conduit: Subscription {
 
-        fileprivate var _parent: PassthroughSubject?
-
-        fileprivate var _downstream: AnySubscriber<Output, Failure>?
-
+        // This property holds the demand requested by the subscriber
         fileprivate var _demand: Subscribers.Demand = .none
-
+        
+        // This computed property returns whether the subscription is complete:
+        // the subscription is considered complete when the completion event
+        // is received by the subscriber
         fileprivate var _isCompleted: Bool {
             return _parent == nil
         }
-
-        fileprivate init(parent: PassthroughSubject,
-                         downstream: AnySubscriber<Output, Failure>) {
+        
+        // The owner of this subscription is a PassthroughSubject, and the PassthroughSubject's
+        // downstream is a subscriber
+        fileprivate var _parent: PassthroughSubject?
+        fileprivate var _downstream: AnySubscriber<Output, Failure>?
+        fileprivate init(parent: PassthroughSubject, downstream: AnySubscriber<Output, Failure>) {
             _parent = parent
             _downstream = downstream
         }
 
+        // The subscription forwards the completion event downstream when the PassthroughSubject
+        // sends the completion event
         fileprivate func _receive(completion: Subscribers.Completion<Failure>) {
             if !_isCompleted {
                 _parent = nil
@@ -264,6 +288,11 @@ extension PassthroughSubject {
             }
         }
 
+        // Subscription protocol conformance
+        // The subscriber calls this method on the subscription to specify
+        // the number of values it wishes to receive before completion
+        // Upstream subscriptions injected through the subject always receives
+        // an unmilimted demand regardless of the actual demand requested by the subscriber
         fileprivate func request(_ demand: Subscribers.Demand) {
             demand.assertNonZero()
             _parent?._lock.do {
@@ -271,7 +300,10 @@ extension PassthroughSubject {
             }
             _parent?._acknowledgeDownstreamDemand()
         }
-
+        
+        // Cancellable protocol conformance
+        // The subscription/subject relationship is de-coupled when the subscriber
+        // cancels the subscription
         fileprivate func cancel() {
             _parent = nil
         }

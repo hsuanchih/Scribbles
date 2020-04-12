@@ -153,7 +153,7 @@ extension Subject where Output == Void {
 ```
 (Snippet from [OpenCombine](https://github.com/broadwaylamb/OpenCombine/blob/master/Sources/OpenCombine/Subject.swift))
 
-Now let's see the implementation for `PassthroughSubject`.
+A `PassthroughSubject` is a publisher typically used to as an adaptor to bridge existing imperative code to the publish/subscribe model. Let's see the implementation for `PassthroughSubject`.
 
 ```Swift
 public final class PassthroughSubject<Output, Failure: Error>: Subject  {
@@ -314,6 +314,30 @@ extension PassthroughSubject {
 
 ---
 ## \@Published
+
+Now we have a better idea of what a `PassthroughSubject` is and how it works, we can now look at how it is used to formulate the `@Published` property wrapper. Let's first review how the `@Published` is used with this example from [Apple](https://developer.apple.com/documentation/combine/published):
+
+```Swift
+class Weather {
+    @Published var temperature: Double
+    init(temperature: Double) {
+        self.temperature = temperature
+    }
+}
+
+let weather = Weather(temperature: 20)
+cancellable = weather.$temperature
+    .sink() {
+        print ("Temperature now: \($0)")
+}
+weather.temperature = 25
+
+// Prints:
+// Temperature now: 20.0
+// Temperature now: 25.0
+```
+
+Now let's implement `@Published`:
 
 ```Swift
 @propertyWrapper

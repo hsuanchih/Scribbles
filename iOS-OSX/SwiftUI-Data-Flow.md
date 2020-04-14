@@ -2,16 +2,21 @@
 ---
 ## \@State
 
-A state is a stored value of primitive type representing the single source of truth in SwiftUI. A value wrapped in `@State` is stored data managed by SwiftUI that has the same life time as the view in which it is declared. Unlike imperative programming paradigm with UIKit, UI updates in SwiftUI are driven by state changes. The wrapped value (synthesized property accessors) returns direct access to the underlying stored value. The projected value returns a binding to the wrapped value.
+A state is a stored value of primitive type representing the single source of truth in SwiftUI. A value wrapped in `@State` is stored data managed by SwiftUI that has the same life time as the view in which it is declared. Unlike imperative programming paradigm with UIKit, UI updates in SwiftUI are driven by state changes. The wrapped value returns direct access to the underlying stored value. The projected value returns a binding to the wrapped value.
 
 ```Swift
 @propertyWrapper 
 struct State<Value> {
 
+    // Creates the state with an initial value
+    init(initialValue value: Value)
+
     // Accesses the underlying value wrapped by this wrapper
+    // Do not access wrappedValue directly, use the state property instead
     var wrappedValue: Value { get nonmutating set }
     
     // Returns a binding to the underlying value wrapped by this wrapper
+    // Use the $ syntax to access projectedValue
     var projectedValue: Binding<Value> { get }
 }
 ```
@@ -28,13 +33,35 @@ struct Binding<Value> {
     init(get: @escaping () -> Value, set: @escaping (Value) -> Void)
     
     // Accesses the underlying value referenced by the binding variable
+    // Do not access wrappedValue directly, use the binding property instead
     var wrappedValue: Value { get nonmutating set }
     
     // Returns the same binding that can be passed down the view hierarchy
+    // Use the $ syntax to access projectedValue
     var projectedValue: Binding<Value> { get }
 }
 ```
+---
+## \@ObservedObject
 
+A observed object is a dependecy on an external data source which conforms to `ObservableObject` protocol. `\@ObservedObject` creates a binding to the observable object similar to the binding created between `\@Binding` and `\@State`.
+
+```Swift
+@propertyWrapper @frozen 
+struct ObservedObject<ObjectType> where ObjectType : ObservableObject {
+    
+    // Initialize with value of type that conforms to ObservableObject
+    init(initialValue: ObjectType)
+    
+    // Accesses the underlying value referenced by the observed object.
+    // Do not access wrappedValue directly, use the observed object property instead
+    var wrappedValue: ObjectType
+    
+    // Returns the same observed object binding that can be passed down the view hierarchy
+    // Use the $ syntax to access projectedValue
+    var projectedValue: ObservedObject<ObjectType>.Wrapper { get }
+}
+```
 ---
 ## ObservableObject
 Concrete types that wish to emit an event when its instance changes can conform to the `ObservableObject` protocol.

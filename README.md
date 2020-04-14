@@ -12,6 +12,7 @@ I'm starting a scratchpad to digest various concepts, starting with the basics &
 * [Protocol Semantics & Existential Container](iOS-OSX/Protocol-Existential-Container.md)
 * [Reference & Value Semantics](iOS-OSX/References-And-Values.md)
 * [Method Dispatch](iOS-OSX/Method-Dispatch.md)
+* [SwiftUI- Data Flow](iOS-OSX/SwiftUI-Data-Flow.md)
 
 ## Author
 

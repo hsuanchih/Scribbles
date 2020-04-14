@@ -48,16 +48,15 @@ Alternatively, we can customize our own publisher logic if we want to.
 ```Swift
 class Contact: ObservableObject {
     @Published var name: String
-    
-    // Send a value change event only if age is 36
     var age: Int {
         willSet {
+            // Send a value change event only if age is 36
             if newValue == 36 {
                 objectWillChange.send()
             }
         }
     }
-
+    
     init(name: String, age: Int) {
         self.name = name
         self.age = age

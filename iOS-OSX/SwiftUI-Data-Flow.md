@@ -2,7 +2,7 @@
 ---
 ## \@State
 
-A state is a stored property representing the single source of truth in SwiftUI. A property wrapped in `@State` is stored data managed by SwiftUI that has the same life time as the view in which it is decalred. Unlike imperative programming paradigm with UIKit, UI updates in SwiftUI are driven by state changes. The wrapped value (synthesized property accessors) returns direct access to the underlying stored value. The projected value returns a binding to the wrapped value.
+A state is a stored value of primitive type representing the single source of truth in SwiftUI. A value wrapped in `@State` is stored data managed by SwiftUI that has the same life time as the view in which it is declared. Unlike imperative programming paradigm with UIKit, UI updates in SwiftUI are driven by state changes. The wrapped value (synthesized property accessors) returns direct access to the underlying stored value. The projected value returns a binding to the wrapped value.
 
 ```Swift
 @propertyWrapper 
@@ -12,6 +12,25 @@ struct State<Value> {
     var wrappedValue: Value { get nonmutating set }
     
     // Returns a binding to the underlying value wrapped by this wrapper
+    var projectedValue: Binding<Value> { get }
+}
+```
+---
+## \@Binding
+
+A binding does not store any values itself. Rather, it provides a gateway to read & write value owned by the source of truth (`@State`). Note that the objective of a binding is to provide accessors to the stored value that is declared elsewhere, thus a binding property does not need an initial value.
+
+```Swift
+@propertyWrapper @dynamicMemberLookup 
+struct Binding<Value> {
+
+    // Creates a binding with closures that read and write the binding value
+    init(get: @escaping () -> Value, set: @escaping (Value) -> Void)
+    
+    // Accesses the underlying value referenced by the binding variable
+    var wrappedValue: Value { get nonmutating set }
+    
+    // Returns the same binding that can be passed down the view hierarchy
     var projectedValue: Binding<Value> { get }
 }
 ```

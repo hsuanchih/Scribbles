@@ -63,6 +63,20 @@ struct ObservedObject<ObjectType> where ObjectType : ObservableObject {
 }
 ```
 ---
+## \@EnvironmentObject
+
+A environment object provides yet another way to propagate dependecy on an external data source which conforms to `ObservableObject` protocol. Instead of propagating the binding through parameter injection, the binding is passed down the view hierarchy by calling [`environmentObject(_:)`](https://developer.apple.com/documentation/swiftui/text/3365512-environmentobject) on the ancester view.
+
+```Swift
+// Pass the observable object down the view hierarchy
+contentView.environmentObject(someObservableObject)
+
+// All subviews of contentView can now access someObservableObject with @EnvironmentObject declaration
+struct SomeViewDownTheHeirarchy: View {
+    @EnvironmentObject var someObservableObject: SomeObservableObject
+}
+```
+---
 ## ObservableObject
 Concrete types that wish to emit an event when its instance changes can conform to the `ObservableObject` protocol.
 

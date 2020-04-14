@@ -1,4 +1,20 @@
 # SwiftUI - Data Flow
+---
+## \@State
+
+A state is a stored property representing the single source of truth in SwiftUI. A property wrapped in `@State` is stored data managed by SwiftUI that has the same life time as the view in which it is decalred. Unlike imperative programming paradigm with UIKit, UI updates in SwiftUI are driven by state changes. The wrapped value (synthesized property accessors) returns direct access to the underlying stored value. The projected value returns a binding to the wrapped value.
+
+```Swift
+@propertyWrapper 
+struct State<Value> {
+
+    // Accesses the underlying value wrapped by this wrapper
+    var wrappedValue: Value { get nonmutating set }
+    
+    // Returns a binding to the underlying value wrapped by this wrapper
+    var projectedValue: Binding<Value> { get }
+}
+```
 
 ---
 ## ObservableObject

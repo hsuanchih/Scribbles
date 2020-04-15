@@ -104,3 +104,35 @@ Slider(value: $value)
 ```
 ---
 ## Notes on Basic View Types
+### TabView
+A SwiftUI `TabView` is UIKit's `UITabBarController` counterpart. Here's a template of how to setup a `TabView`.
+```Swift
+struct ContentView: View {
+    
+    // Categories shown in AirBnB's Tab Bar
+    enum Category : String, CaseIterable, CustomStringConvertible {
+        case explore, saved, trips, inbox, profile
+    
+        var description: String {
+            rawValue.uppercased()
+        }
+        var imageName: String {
+            "image-\(rawValue)"
+        }
+    }
+    @State private var selectedTab = Category.explore
+  
+    var body: some View {
+        TabView(selection: $selectedTab) {
+            ForEach(Category.allCases, id: \.self) { category in
+                DetailView(categoryName: category.description)
+                    .tabItem {
+                        Image(systemName: category.imageName).resizable()
+                        Text(category.description)
+                    }
+                    .tag(category)
+            }
+        }
+    }
+}
+```

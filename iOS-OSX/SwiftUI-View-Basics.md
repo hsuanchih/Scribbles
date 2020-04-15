@@ -6,7 +6,7 @@ A `View` is the fundamental building block for everything visible on screen in S
 ```Swift
 protocol View {
     
-    // The body of a view must conform to View
+    // The body of a view must be a View
     associatedtype Body : View
     var body: Self.Body { get }
 }

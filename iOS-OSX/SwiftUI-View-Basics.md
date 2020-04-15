@@ -105,7 +105,8 @@ Slider(value: $value)
 ---
 ## Notes on Basic View Types
 ### TabView
-A SwiftUI `TabView` is UIKit's `UITabBarController` counterpart. Here's a template of how to setup a `TabView`.
+A SwiftUI `TabView` is UIKit's `UITabBarController` counterpart. Here's an example template for how to layout a `TabView` dynamically.
+
 ```Swift
 struct ContentView: View {
     
@@ -120,17 +121,25 @@ struct ContentView: View {
             "image-\(rawValue)"
         }
     }
+    
+    // Selected tab state whose binding is passed into TabView's initializer
     @State private var selectedTab = Category.explore
   
     var body: some View {
         TabView(selection: $selectedTab) {
+        
+            // Use ForEach to dynamically create the tabs in TabView
             ForEach(Category.allCases, id: \.self) { category in
+                
+                // DetailView is our custom-defined view corresponding
+                // to each user-selected tab
                 DetailView(categoryName: category.description)
+                    
+                    // View modifier constructs what each tab bar should look like
                     .tabItem {
                         Image(systemName: category.imageName).resizable()
                         Text(category.description)
                     }
-                    .tag(category)
             }
         }
     }

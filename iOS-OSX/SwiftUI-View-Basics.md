@@ -103,7 +103,7 @@ Slider(value: $value)
     .background(Color.green)
 ```
 ---
-## Notes on Basic View Types
+## View Types & Templates
 ### TabView
 A SwiftUI `TabView` is UIKit's `UITabBarController` counterpart. Here's an example template for how to layout a `TabView` dynamically.
 

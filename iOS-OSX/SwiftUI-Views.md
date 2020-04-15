@@ -1,5 +1,18 @@
 # SwiftUI - Views
 ---
+## View
+A `View` is the fundamental building block for everything visible on screen in SwiftUI. All concrete view types must conform to the `View` protocol (labels, images, controls, containers, etc) as the minimum requirement.
+
+```Swift
+protocol View {
+    
+    // The body of a view must conform to View
+    associatedtype Body : View
+    var body: Self.Body { get }
+}
+```
+
+---
 ## ViewBuilder
 A `ViewBuilder` is capable of constructing the contents of a composite view based on individual views declared in a closure.
 Concrete `View` types that can be formed using a composition of one or more subviews use a `ViewBuilder` to build its content.

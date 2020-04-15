@@ -1,4 +1,4 @@
-# SwiftUI - Views
+# SwiftUI - View Basics
 ---
 ## View
 A `View` is the fundamental building block for everything visible on screen in SwiftUI. All concrete view types must conform to the `View` protocol (labels, images, controls, stacks, containers, etc) as the minimum requirement.
@@ -102,3 +102,5 @@ Slider(value: $value)
     .cornerRadius(10)
     .background(Color.green)
 ```
+---
+## Notes on Basic View Types

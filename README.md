@@ -13,6 +13,7 @@ I'm starting a scratchpad to digest various concepts, starting with the basics &
 * [Reference & Value Semantics](iOS-OSX/References-And-Values.md)
 * [Method Dispatch](iOS-OSX/Method-Dispatch.md)
 * [SwiftUI- Data Flow](iOS-OSX/SwiftUI-Data-Flow.md)
+* [SwiftUI- View Basics](iOS-OSX/SwiftUI-View-Basics.md)
 
 ## Author
 

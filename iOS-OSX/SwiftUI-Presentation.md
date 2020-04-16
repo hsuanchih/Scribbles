@@ -103,7 +103,7 @@ Slider(value: $value)
     .background(Color.green)
 ```
 ---
-## Navigation
+## Navigation Basics
 ### TabView
 A SwiftUI `TabView` is UIKit's `UITabBarController` counterpart. In UIKit, a `UITabBarController` can hold a number of `UIViewController`s users can switch amongst; the `TabView` is no different.
 

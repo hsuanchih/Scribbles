@@ -1,6 +1,7 @@
-# SwiftUI - View Basics
+# SwiftUI - Presentation
 ---
-## View
+## View Basics
+### View
 A `View` is the fundamental building block for everything visible on screen in SwiftUI. All concrete view types must conform to the `View` protocol (labels, images, controls, stacks, containers, etc) as the minimum requirement.
 
 ```Swift
@@ -12,8 +13,7 @@ protocol View {
 }
 ```
 
----
-## ViewBuilder
+### ViewBuilder
 A `ViewBuilder` is capable of constructing the contents of a composite view based on individual views declared in a closure.
 Concrete `View` types that can be formed using a composition of one or more subviews use a `ViewBuilder` to build its content.
 Take `HStack` for example, we declare views we want to layout in the `HStack` in the closure parameter we pass into its initializer - 
@@ -53,8 +53,8 @@ struct HStack<Content> where Content : View {
     } 
 }
 ```
----
-## View Modifier
+
+### View Modifier
 View modifiers are used to apply configurations a view and its subviews. Modifiers available to a view vary depending on attributes pertinent to that specific type of view. Here's an example of view modifiers in action.
 
 ```Swift
@@ -103,7 +103,7 @@ Slider(value: $value)
     .background(Color.green)
 ```
 ---
-## View Types & Templates
+## Navigation
 ### TabView
 A SwiftUI `TabView` is UIKit's `UITabBarController` counterpart. Here's an example template for how to layout a `TabView` dynamically.
 
@@ -143,5 +143,34 @@ struct ContentView: View {
             }
         }
     }
+}
+```
+### NavigationView
+A SwiftUI `NavigationView` can be seen as UIKit's `UINavigationController` equivalent. Recall that every visible component in SwiftUI is a view, and a `NavigationView` is no different - it is a view for managing a stack of views as a visible path in a navigation hierarchy. Let's start with its declaration:
+
+```Swift
+struct NavigationView<Content> where Content : View {
+    private var content : Content
+    init(@ViewBuilder content: () -> Content) {
+        self.content = content()
+        .
+    }
+}
+```
+From the snippet above we see that we need to give the `NavigationView` some content in its initializer - what should the content be? Similar to how we'd give a `UINavigationController` a `UIViewController` instance as its `rootViewController` in UIKit, the content we should give to the `NavigationView` is the same content we would put in the view of our `UINavigationController`'s `rootViewController`.
+
+### NavigationLink
+`NavigationView` took care of the mechanics of the navigation stack - more specfically providing the navigation bar and the back buttons to pop views off the stack. The question that follows is how can we push views onto the navigation stack. In other words, how do we implement UIKit's equivalent of `UINavigationController`'s `pushViewController(_:animated:)` in SwiftUI? The `NavigationLink` serves this exact purpose.
+
+```Swift
+struct NavigationLink<Label, Destination> where Label : View, Destination : View {
+
+    // NavigationLink offers various initializer's, but here are the 2 that are
+    // most relevant to our discussion:
+    // The most basic is providing NavigationLink the following:
+    // 1. A destination - the view we'd want to display when the link is tapped
+    // 2. A label - the view we'd want to display as the link itself
+    init(destination: Destination, @ViewBuilder label: () -> Label) {}
+    init(destination: Destination, isActive: Binding<Bool>, @ViewBuilder label: () -> Label) {}
 }
 ```

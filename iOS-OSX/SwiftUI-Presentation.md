@@ -105,7 +105,20 @@ Slider(value: $value)
 ---
 ## Navigation
 ### TabView
-A SwiftUI `TabView` is UIKit's `UITabBarController` counterpart. Here's an example template for how to layout a `TabView` dynamically.
+A SwiftUI `TabView` is UIKit's `UITabBarController` counterpart. In UIKit, a `UITabBarController` can hold a number of `UIViewController`s users can switch amongst; the `TabView` is no different.
+
+```Swift
+struct TabView<SelectionValue, Content> where SelectionValue : Hashable, Content : View {
+    
+    // This is typically the initializer we want to call on the TabView, passing in:
+    // 1. A binding to the selected tab in the TabView
+    // 2. A number of SwiftUI views equivalent to each view controller a UITabBarController
+    //    in UIKit
+    init(selection: Binding<SelectionValue>?, @ViewBuilder content: () -> Content) {}
+}
+```
+
+Here's an example template for how to layout a `TabView` dynamically.
 
 ```Swift
 struct ContentView: View {

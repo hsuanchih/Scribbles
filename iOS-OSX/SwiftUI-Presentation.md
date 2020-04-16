@@ -118,7 +118,7 @@ struct TabView<SelectionValue, Content> where SelectionValue : Hashable, Content
 }
 ```
 
-Here's an example template for how to layout a `TabView` dynamically.
+Here's a template for how to layout a `TabView` dynamically.
 
 ```Swift
 struct ContentView: View {
@@ -170,7 +170,38 @@ struct NavigationView<Content> where Content : View {
     }
 }
 ```
-From the snippet above we see that we need to give the `NavigationView` some content in its initializer - what should the content be? Similar to how we'd give a `UINavigationController` a `UIViewController` instance as its `rootViewController` in UIKit, the content we should give to the `NavigationView` is the same content we would put in the view of our `UINavigationController`'s `rootViewController`.
+From the snippet above we see that we need to give the `NavigationView` some content in its initializer - what should the content be? Similar to how we'd give a `UINavigationController` a `UIViewController` instance as its `rootViewController` in UIKit, the content we should give to the `NavigationView` is the same content we would put in the view of our `UINavigationController`'s `rootViewController`. 
+
+Here's a template.
+```Swift
+// We declare HomeView with a Button titled "Hit Me"
+// that performs no action when clicked.
+struct HomeView : View {
+    var body : some View {
+        VStack {
+            Button(action: {}) {
+                Text("Hit Me")
+                    .foregroundColor(.white)
+                    .padding()
+                    .background(Color.green)
+                    .cornerRadius(10)
+            }
+        }
+    }
+}
+
+// Here we embed HomeView inside a NavigationView.
+// Note the navigation bar title view modifier should apply
+// to each view on the navigation stack & not the NavigationView
+struct ContentView: View {
+    var body: some View {
+        NavigationView {
+            HomeView()
+                .navigationBarTitle("Home")
+        }
+    }
+}
+```
 
 ### NavigationLink
 `NavigationView` took care of the mechanics of the navigation stack - more specfically providing the navigation bar and the back buttons to pop views off the stack. The question that follows is how can we push views onto the navigation stack. In other words, how do we implement UIKit's equivalent of `UINavigationController`'s `pushViewController(_:animated:)` in SwiftUI? The `NavigationLink` serves this exact purpose.
@@ -185,5 +216,40 @@ struct NavigationLink<Label, Destination> where Label : View, Destination : View
     // 2. A label - the view we'd want to display as the link itself
     init(destination: Destination, @ViewBuilder label: () -> Label) {}
     init(destination: Destination, isActive: Binding<Bool>, @ViewBuilder label: () -> Label) {}
+}
+```
+
+Building on our template from the __NavigationView__ section, we now want to push a new view onto the navigation stack when the "Hit Me" is tapped.
+
+```Swift
+// Here we replaced the Button with a NavigationLink
+// while preserving the same UI
+// The NavigationLink pushes another HomeView onto the
+// navigation stack
+struct HomeView : View {
+    let id : Int
+    var body : some View {
+        VStack {
+            NavigationLink(destination: HomeView(id: id+1)
+                .navigationBarTitle("Level \(id+1)")) {
+                    Text("Hit Me")
+                        .foregroundColor(.white)
+                        .padding()
+                        .background(Color.green)
+                        .cornerRadius(10)
+            }
+        }
+    }
+}
+
+// ContentView remains pretty much the same, except
+// HomeView now takes a parameter "id"
+struct ContentView: View {
+    var body: some View {
+        NavigationView {
+            HomeView(id: 0)
+                .navigationBarTitle("Home")
+        }
+    }
 }
 ```

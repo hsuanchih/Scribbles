@@ -14,6 +14,7 @@ I'm starting a scratchpad to digest various concepts, starting with the basics &
 * [Method Dispatch](iOS-OSX/Method-Dispatch.md)
 * [SwiftUI - Data Flow](iOS-OSX/SwiftUI-Data-Flow.md)
 * [SwiftUI - Presentation](iOS-OSX/SwiftUI-Presentation.md)
+* [Type Erasure & Protocol with Associated Types](iOS-OSX/Type-Erasure-And-Protocol-Associated-Types.md)
 
 ## Author
 

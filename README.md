@@ -4,22 +4,22 @@ I'm starting a scratchpad to digest various concepts, starting with the basics &
 
 ---
 ## Cocoa
-* [Auto Layout](iOS-OSX/Auto-Layout.md)
-* [Combine - Publisher, Subscriber & Subscription](iOS-OSX/Combine-Publisher-Subscriber-Subscription.md)
-* [Combine Publishers - Operator, Subject & @Published](iOS-OSX/Combine-Publishers-Operator-Subject-Published.md)
-* [Combine Subscribers - Assign & Sink](iOS-OSX/Combine-Subscribers-Assign-Sink.md)
-* [Concurrency, GCD & Operations](iOS-OSX/Concurrency-GCD-Operations.md)
-* [Event-Handling & Responder Chain](iOS-OSX/Event-Handling-And-Responder-Chain.md)
-* [SwiftUI - Data Flow](iOS-OSX/SwiftUI-Data-Flow.md)
-* [SwiftUI - Presentation](iOS-OSX/SwiftUI-Presentation.md)
+* [Auto Layout](Cocoa/Auto-Layout.md)
+* [Combine - Publisher, Subscriber & Subscription](Cocoa/Combine-Publisher-Subscriber-Subscription.md)
+* [Combine Publishers - Operator, Subject & @Published](Cocoa/Combine-Publishers-Operator-Subject-Published.md)
+* [Combine Subscribers - Assign & Sink](Cocoa/Combine-Subscribers-Assign-Sink.md)
+* [Concurrency, GCD & Operations](Cocoa/Concurrency-GCD-Operations.md)
+* [Event-Handling & Responder Chain](Cocoa/Event-Handling-And-Responder-Chain.md)
+* [SwiftUI - Data Flow](Cocoa/SwiftUI-Data-Flow.md)
+* [SwiftUI - Presentation](Cocoa/SwiftUI-Presentation.md)
 
 ---
 ## Swift
-* [Property Wrapper](iOS-OSX/Property-Wrapper.md)
-* [Protocol Semantics & Existential Container](iOS-OSX/Protocol-Existential-Container.md)
-* [Reference & Value Semantics](iOS-OSX/References-And-Values.md)
-* [Method Dispatch](iOS-OSX/Method-Dispatch.md)
-* [Type Erasure & Protocol with Associated Types](iOS-OSX/Type-Erasure-And-Protocol-Associated-Types.md)
+* [Property Wrapper](Swift/Property-Wrapper.md)
+* [Protocol Semantics & Existential Container](Swift/Protocol-Existential-Container.md)
+* [Reference & Value Semantics](Swift/References-And-Values.md)
+* [Method Dispatch](Swift/Method-Dispatch.md)
+* [Type Erasure & Protocol with Associated Types](Swift/Type-Erasure-And-Protocol-Associated-Types.md)
 
 ## Author
 

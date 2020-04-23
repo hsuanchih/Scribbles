@@ -22,6 +22,10 @@ I'm starting a scratchpad to digest various concepts, starting with the basics &
 * [Type Erasure & Protocol with Associated Types](Swift/Type-Erasure-And-Protocol-Associated-Types.md)
 
 ---
+## Design Patterns
+### Behavioral
+* [Chain of Responsibility](Design-Patterns/Chain-Of-Responsibility.md)
+---
 ## Computer Network
 * [OSI Model](Computer-Network/OSI-Model.md)
 

@@ -1,7 +1,7 @@
 # Chain of Responsibility
 ---
 
-__Chain of Responsibility__ delegates a single responsibility to a collection of entities that can handle a specific request. Upon receiving a request, an entity can either handle the request if it is within the scope of its responsibility, or pass it along to the next entity in a chain of handlers. The Cocoa [__Responder Chain__](../Cocoa/Event-Handling-And-Responder-Chain.md) fits this design pattern.
+__Chain of Responsibility__ delegates a single responsibility to a collection of entities that can handle a specific request. Upon receiving a request, an entity can either handle the request if it is within the scope of its responsibility, or pass it along to the next entity in a chain of handlers. The Cocoa [Responder Chain](../Cocoa/Event-Handling-And-Responder-Chain.md) fits this design pattern.
 
 ---
 ## Example

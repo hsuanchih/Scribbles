@@ -21,6 +21,10 @@ I'm starting a scratchpad to digest various concepts, starting with the basics &
 * [Method Dispatch](Swift/Method-Dispatch.md)
 * [Type Erasure & Protocol with Associated Types](Swift/Type-Erasure-And-Protocol-Associated-Types.md)
 
+---
+## Computer Network
+* [OSI Model](Computer-Network/OSI-Model.md)
+
 ## Author
 
 Hsuan-Chih Chuang, <hsuanchih.chuang@gmail.com>

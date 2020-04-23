@@ -26,6 +26,8 @@ I'm starting a scratchpad to digest various concepts, starting with the basics &
 ### Behavioral
 * [Chain of Responsibility](Design-Patterns/Chain-Of-Responsibility.md)
 * [Iterator](Design-Patterns/Iterator.md)
+* [State](Design-Patterns/State.md)
+
 ---
 ## Computer Network
 * [OSI Model](Computer-Network/OSI-Model.md)

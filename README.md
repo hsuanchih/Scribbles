@@ -29,6 +29,8 @@ I'm starting a scratchpad to digest various concepts, starting with the basics &
 * [Mediator](Design-Patterns/Mediator.md)
 * [Memento](Design-Patterns/Memento.md)
 * [State](Design-Patterns/State.md)
+### Structural
+* [Adapter](Design-Patterns/Adapter.md)
 
 ---
 ## Computer Network

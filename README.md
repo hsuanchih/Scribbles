@@ -31,6 +31,7 @@ I'm starting a scratchpad to digest various concepts, starting with the basics &
 * [State](Design-Patterns/State.md)
 #### Structural
 * [Adapter](Design-Patterns/Adapter.md)
+* [Proxy](Design-Patterns/Proxy.md)
 
 ---
 ## Computer Network

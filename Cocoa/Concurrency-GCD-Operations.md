@@ -100,7 +100,7 @@ dispatchGroup.notify(queue: DispatchQueue.main) {
     print("all tasks have completed")
 }
 ```
-It is important to note that __dispatch group notification is asynchronous__, so if more tasks are submitted after the calling `notify`, the __notification gets fired again__ after these tasks complete.
+It is important to note that __dispatch group notification is asynchronous__, so if more tasks are submitted after calling `notify`, the __notification gets fired again__ after these tasks complete.
 
 This seems convenient and all, but what if instead of getting notified, I'd want to block and wait until all tasks have completed? We can do that - using the `wait` call.
 ```Swift

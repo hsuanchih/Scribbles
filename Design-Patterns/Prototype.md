@@ -1,7 +1,7 @@
 # Prototype
 ---
 __Prototype__ allows a copy of a complex object to be created in its existing state without introducing additional dependencies.
-The `NSCopying` protocol exists to serve this exact purpose.
+The [`NSCopying`](https://developer.apple.com/documentation/foundation/nscopying) protocol exists to serve this exact purpose.
 
 ---
 ## Example

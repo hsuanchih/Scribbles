@@ -27,6 +27,7 @@ I'm starting a scratchpad to digest various concepts, starting with the basics &
 * [Builder](Design-Patterns/Builder.md)
 * [Prototype](Design-Patterns/Prototype.md)
 #### Behavioral
+* [Command](Design-Patterns/Command.md)
 * [Chain of Responsibility](Design-Patterns/Chain-Of-Responsibility.md)
 * [Iterator](Design-Patterns/Iterator.md)
 * [Mediator](Design-Patterns/Mediator.md)

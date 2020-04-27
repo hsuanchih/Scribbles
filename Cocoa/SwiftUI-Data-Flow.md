@@ -44,7 +44,7 @@ struct Binding<Value> {
 ---
 ## \@ObservedObject
 
-A observed object is a dependecy on an external data source which conforms to `ObservableObject` protocol. `\@ObservedObject` creates a binding to the observable object similar to the binding created between `\@Binding` and `\@State`.
+A observed object is a dependecy on an external data source which conforms to `ObservableObject` protocol. `@ObservedObject` creates a binding to the observable object similar to the binding created between `@Binding` and `@State`.
 
 ```Swift
 @propertyWrapper @frozen 

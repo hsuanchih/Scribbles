@@ -23,9 +23,7 @@ I'm starting a scratchpad to digest various concepts, starting with the basics &
 
 ---
 ## Design Patterns
-#### Creational
-* [Builder](Design-Patterns/Builder.md)
-* [Prototype](Design-Patterns/Prototype.md)
+* [Creational](Design-Patterns/Creational.md)
 #### Behavioral
 * [Command](Design-Patterns/Command.md)
 * [Chain of Responsibility](Design-Patterns/Chain-Of-Responsibility.md)

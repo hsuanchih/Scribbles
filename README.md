@@ -25,9 +25,7 @@ I'm starting a scratchpad to digest various concepts, starting with the basics &
 ## Design Patterns
 * [Creational](Design-Patterns/Creational.md)
 * [Behavioral](Design-Patterns/Behavioral.md)
-#### Structural
-* [Adapter](Design-Patterns/Adapter.md)
-* [Proxy](Design-Patterns/Proxy.md)
+* [Structural](Design-Patterns/Structural.md)
 
 ---
 ## System

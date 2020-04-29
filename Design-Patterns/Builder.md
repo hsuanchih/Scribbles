@@ -86,7 +86,7 @@ let bluePlane = AnyVehicle()
     .numberOfWings(2)
 ```
 ---
-## <a name="Prototype"></a>Prototype
+## Prototype
 
 __Prototype__ allows a copy of a complex object to be created in its existing state without introducing additional dependencies.
 The [`NSCopying`](https://developer.apple.com/documentation/foundation/nscopying) protocol exists to serve this exact purpose.

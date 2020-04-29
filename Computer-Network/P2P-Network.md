@@ -21,7 +21,7 @@ Or if I want to search content on the network, how do I know who has it?
 A centralized lookup service is a directory that keeps tracks of who has what content and how it can be contacted. In the example below: 
 1. Machine `m1` is looking for content `E`, but it doesn't know which machine on the network has it.
 2. `m1` contacts the centralized lookup service, and is informed that machine `m5` has the content.
-3. `m1` then connects with `m5` directly for getting content `E`.
+3. `m1` then connects with `m5` directly using the its IP & port as provided by the centralized lookup service to get content `E`.
 
 <img src="images/centralized-lookup-service.png" height="300"/>
 

@@ -1,7 +1,9 @@
 # Design Patterns - Creational
 
-* [__Builder__](/##Builder)
-* [__Prototype__](/##Prototype)
+<ul>
+<li><h2><a href="Builder.md/##Builder">Builder</a></h2></li>
+<li><h2><a href="Builder.md/##Prototype">Prototype</a></h2></li>
+</ul>
 
 ---
 ## Builder

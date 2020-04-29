@@ -1,8 +1,8 @@
 # Design Patterns - Creational
 
 <h2><ul>
-<li><a href="##Builder">Builder</a></li>
-<li><a href="##Prototype">Prototype</a></li>
+<li><a href="#Builder">Builder</a></li>
+<li><a href="#Prototype">Prototype</a></li>
 </ul></h2>
 
 ---

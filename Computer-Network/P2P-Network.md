@@ -14,6 +14,7 @@ A P2P network can be used for:
 
 ---
 ## Architecture
+---
 ### Centralized Lookup Service
 If I have some content that I want to share, how do I let everybody else on the network know that it exists? 
 Or if I want to search content on the network, how do I know who has it? 
@@ -26,6 +27,36 @@ A centralized lookup service is a directory that keeps tracks of who has what co
 <img src="images/centralized-lookup-service.png" height="300"/>
 
 Image from [UC Berkeley, CS 162, Fall 2011](https://inst.eecs.berkeley.edu/~cs162/fa11/)
+
+__Pros:__
+* Easy to implement & deploy sophisticated features on top of a single service 
+
+__Cons:__
+* Service needs to scale to handle growing nodes participating on the network
+* Single point of failure & single source of legal vulnerability
+---
+### Gnutella
+One way to solve the single point of failure problem with centralized lookup service is to de-centralize the lookup. But now having removed the lookup service, how would I know where to get content? 
+
+When I join the network as a node, I will pick randomly from a list of pre-defined peers (typically hardcoded in the application) and join their network. These peers & their immediate neighbors now become my neighbors. I can then send my requests to my neighbors & have them forward my request downstream. In the example below:
+1. Machine `m1` is looking for content `E`, but it doesn't know which machine on the network has it.
+2. `m1` sends a quest to its neighbors `m2` & `m3`.
+3. Neither `m2` or `m3` have the content, so they forward the request to their neighbors `m4`, `m5` and `m6`.
+4. `m5` happens to have the content, so it contacts `m1` to exchange the content.
+
+<img src="images/gnutella.png" height="300"/>
+
+Image from [UC Berkeley, CS 162, Fall 2011](https://inst.eecs.berkeley.edu/~cs162/fa11/)
+
+__Note:__
+
+A request contains the requesting node's IP & Time-To-Live value - if a request's Time-To-Live reaches 0 before the content is found, the request is dropped altogether. This limits the possibility of requests flooding the network.
+
+__Pros:__
+* Completely decentralized 
+
+__Cons:__
+* Requests can potentially flood the network as nodes grow, ending up with more query traffic than content traffic
 
 ---
 ## Challenges

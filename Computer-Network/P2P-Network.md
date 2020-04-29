@@ -20,7 +20,7 @@ Or if I want to search content on the network, how do I know who has it?
 
 A centralized lookup service is a directory that keeps tracks of who has what content and how it can be contacted.
 
-![Centralized Lookup Service](images/Centralized-Lookup-Service.png)
+<img src="images/centralized-lookup-service.png" height="200"/>
 
 ---
 ## Challenges

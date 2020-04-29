@@ -34,6 +34,7 @@ __Pros:__
 __Cons:__
 * Service needs to scale to handle growing nodes participating on the network
 * Single point of failure & single source of legal vulnerability
+
 ---
 ### Gnutella
 One way to solve the single point of failure problem with centralized lookup service is to de-centralize the lookup. But now having removed the lookup service, how would I know where to get content? 
@@ -57,9 +58,16 @@ __Pros:__
 
 __Cons:__
 * Requests can potentially flood the network as nodes grow, ending up with more query traffic than content traffic
-* Horizon effect introduced by Time-To-Live; there may be resources on the network that will never be reached
+* Horizon effect introduced by Time-To-Live; common resources are easy to find while rare resources can seldom be reached
 
 ---
-## Challenges
-* __Dynamicity:__ Each node on the network can be online & offline at any time. How to preserve continuity of service?
-* __Heterogeneity:__ Each node on the network has different capacity (bandwidth, computation power). How to preserve reliability?
+### KaZaa
+In addition to some of the problems seen in the previous topologies, there are other challenges yet to be addressed in P2P networks: 
+* __Dynamicity:__ Each node on the network can be online & offline at any time. Requests might not make it too far downstream before it is dropped.
+* __Heterogeneity:__ Each node on the network has different capacity (bandwidth, computation power). Requests going through a deprived node could lead to a performance bottleneck.
+
+To solve these problems we identify the nodes that are consistently online with good capacity, and designate them as ultra-peers. We can assign these ultra-peers as the first point of contact to all other leaf nodes. Utlra-peers themselves are also connected to fellow ultra-peers, forming a two-level topology. A request going through an ultra-peer is advertised to all leaf nodes & other ultra-peers.
+
+<img src="images/kazaa.png" height="300"/>
+
+Image from [UC Berkeley, CS 162, Fall 2011](https://inst.eecs.berkeley.edu/~cs162/fa11/)

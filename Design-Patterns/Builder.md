@@ -1,12 +1,12 @@
 # Design Patterns - Creational
 
 <h2><ul>
-<li><a href="Builder.md/##Builder">Builder</a></li>
-<li><a href="Builder.md/##Prototype">Prototype</a></li>
+<li><a href="##Builder">Builder</a></li>
+<li><a href="Prototype">Prototype</a></li>
 </ul></h2>
 
 ---
-## Builder
+## Builder 
 
 __Builder__ is a creational mechanism that allows for construction of complex objects step by step. You can create different representations of an object via the same construction process.
 
@@ -86,7 +86,7 @@ let bluePlane = AnyVehicle()
     .numberOfWings(2)
 ```
 ---
-## Prototype
+## <a name="Prototype"></a>Prototype
 
 __Prototype__ allows a copy of a complex object to be created in its existing state without introducing additional dependencies.
 The [`NSCopying`](https://developer.apple.com/documentation/foundation/nscopying) protocol exists to serve this exact purpose.

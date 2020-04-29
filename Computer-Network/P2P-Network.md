@@ -57,6 +57,7 @@ __Pros:__
 
 __Cons:__
 * Requests can potentially flood the network as nodes grow, ending up with more query traffic than content traffic
+* Horizon effect introduced by Time-To-Live - there may be resources on the network that will never be reached
 
 ---
 ## Challenges

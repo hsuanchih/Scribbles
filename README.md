@@ -24,13 +24,7 @@ I'm starting a scratchpad to digest various concepts, starting with the basics &
 ---
 ## Design Patterns
 * [Creational](Design-Patterns/Creational.md)
-#### Behavioral
-* [Command](Design-Patterns/Command.md)
-* [Chain of Responsibility](Design-Patterns/Chain-Of-Responsibility.md)
-* [Iterator](Design-Patterns/Iterator.md)
-* [Mediator](Design-Patterns/Mediator.md)
-* [Memento](Design-Patterns/Memento.md)
-* [State](Design-Patterns/State.md)
+* [Behavioral](Design-Patterns/Behavioral.md)
 #### Structural
 * [Adapter](Design-Patterns/Adapter.md)
 * [Proxy](Design-Patterns/Proxy.md)

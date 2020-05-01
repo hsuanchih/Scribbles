@@ -1,4 +1,4 @@
-# Open Systems Interconnection Model
+# OAuth 2.0
 
 ![OAuth 2.0 Flow](images/oauth-flow.png)
 

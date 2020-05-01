@@ -32,8 +32,9 @@ I'm starting a scratchpad to digest various concepts, starting with the basics &
 * [P2P Network](System/P2P-Network.md)
 
 ---
-## Computer Network
+## Standards
 * [OSI Model](Computer-Network/OSI-Model.md)
+* [OAuth 2.0](Computer-Network/OAuth2.md)
 
 ## Author
 

@@ -80,3 +80,5 @@ URLSession.shared.resumeDataTask(with: URLRequest(url: URL(string: "http://numbe
 // Console Output:
 // NumberModel(text: "7 is the figurative number of seas.", number: 7.0, type: "trivia")
 ```
+
+So far our promise implementation allows us to store a callback upfront to be invoked some time in the future. Currently how it's being used, however, doesn't deviate much from how we would typically make an asynchrounous call. If we wanted to chain asynchronous calls using this promise, we'd again end up in nested closures. This promise is a good start, but it still requires a lot of work.

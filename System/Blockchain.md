@@ -12,6 +12,15 @@ To wrap things up, we'll piece the components together and have them work in tan
 import Foundation
 import CryptoKit
 
+struct Crypto {
+    static func sha256<Input: Encodable>(_ input: Input) -> String {
+        SHA256.hash(data: try! JSONEncoder().encode(input))
+            .makeIterator()
+            .map { String(format: "%02x", $0) }
+            .joined()
+    }
+}
+
 @dynamicMemberLookup
 struct Block {
     struct Content : Encodable {

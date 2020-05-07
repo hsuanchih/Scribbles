@@ -81,4 +81,54 @@ URLSession.shared.resumeDataTask(with: URLRequest(url: URL(string: "http://numbe
 // NumberModel(text: "7 is the figurative number of seas.", number: 7.0, type: "trivia")
 ```
 
-So far our promise implementation allows us to store a callback upfront to be invoked some time in the future. Currently how it's being used, however, doesn't deviate much from how we would typically make an asynchrounous call. If we wanted to chain asynchronous calls using this promise, we'd again end up in nested closures. This promise is a good start, but it still requires a lot of work.
+So far our promise implementation allows us to store a callback upfront to be invoked some time in the future. But there's an immediate issue we need to address - an issue made obvious if the promise resolves before we get an opportunity to call `then` on the promise. Take this example where a promise resolves synchronously:
+
+```Swift
+let promise = Promise<Int>()
+
+// The promise resolves before a callback is assigned
+promise.resolve(3)
+
+// The value 3 never gets printed
+promise.then { value in print(value) }
+```
+
+A valid argument might be that promises are not meant to be used this way. After all, promises are supposed to be fulfilled some time in the future - we have other programming paradigms to handle synchronous propagation of values much more naive than promises. Nevertheless, we should not be making assumptions about temporal relationships between promise resolution and callback assignment. The way to fix it is to give a promise state:
+
+```Swift
+// The most primitive form of a Promise
+// The agreement of this promise is to deliver a Value when the promise can be fulfilled
+class Promise<Value> {
+
+    // A callback stored within a promise
+    // This callback is called some time in the future when the promise can be fulfilled
+    private var callback : ((Value) -> Void)?
+    
+    // This promise now has state:
+    // A promise is initially pending, but will be resolved as soon as the promise
+    // is fulfilled
+    private var state : State<Value> = .pending
+    enum State<Value> {
+        case pending
+        case resolved(Value)
+    }
+    
+    // The resolve method is called by the promise in the future to fulfill the promise
+    func resolve(_ value: Value) -> Void {
+        // Only resolve & fulfill the promise if it is still pending 
+        guard case .pending = state else { return }
+        state = .resolved(value)
+        callback?(value)
+    }
+    
+    // The then method can be called on the promise at anytime to designate the behavior
+    // that should happen at the time when the the promise is fulfilled
+    func then(onResolved: @escaping (Value) -> Void) {
+        callback = onResolved
+        // Should callback if the promise resolves before this method is invoked on the promise
+        if case .resolved(let value) = state {
+            callback?(value)
+        }
+    }
+}
+```

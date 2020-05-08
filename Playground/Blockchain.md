@@ -394,4 +394,4 @@ Balance for 994E0CFB-D8CD-4ABD-ADF7-C1EFE60302E2 is: 0.6900000000000001
 
 ---
 ## Wrapping Up
-So we've built an over-simplified flavor of a blockchain with the intent to understand its components. This implementation is still far from the real thing, as we've limited the implementation to a simplified client-side view. Remember the blockchain is a distributed ledger backed by a peer-to-peer network, and involves many facets like digital signature, message transport, synchronization, and consensus - none of which we've addressed here. Nevertheless, we're a step further in demystifying how blockchains work. [Here's the code](Blockchain.playground).
+So we've built an over-simplified flavor of a blockchain with the intent to understand its components. This implementation is still far from the real thing, as we've limited the implementation to a simplified client-side view. Remember the blockchain is a distributed ledger backed by a peer-to-peer network, and involves many facets like digital signature, message transport, synchronization, and consensus - none of which we've addressed here. Nevertheless, we're a step further in demystifying how blockchains work.

@@ -330,3 +330,64 @@ struct BlockChain {
     }
 }
 ```
+
+---
+## Simulation
+Finally here's a simulation of the blockchain we built:
+```Swift
+// We start the simulation with a blockchain of difficulty 3
+var blockchain = BlockChain(difficulty: 3)
+
+// And seed the blockchain with a transaction from alice to bob
+let alice = PublicKey(), bob = PublicKey()
+blockchain.accept(
+    Transaction(
+        sender: alice,
+        receiver: bob,
+        amount: Double.random(in: 0...20)
+    )
+)
+
+// Then I take over and do the heavy lifting, adding each pending transaction
+// to the blockchain
+let me = PublicKey()
+while let transaction = blockchain.nextTransaction {
+    guard let block = Block(data: transaction) else { continue }
+    blockchain.add(block, by: me)
+    print("Balance for \(me) is: \(blockchain.balance(me))")
+}
+```
+With some sample console output:
+```
+==========================================================
+994E0CFB-D8CD-4ABD-ADF7-C1EFE60302E2 adds a new block to the chain
+Computing Proof of Work...
+Computation complete: 000d668dd9e38b893c366a3c1938be8a96526bbe04bff26f96a2e4aa5f49848b
+Time used: 4.692615985870361 seconds
+
+Balance for 994E0CFB-D8CD-4ABD-ADF7-C1EFE60302E2 is: 0.0
+
+==========================================================
+994E0CFB-D8CD-4ABD-ADF7-C1EFE60302E2 adds a new block to the chain
+Computing Proof of Work...
+Computation complete: 0005d07b09fe88aed40456a7656c982be8022a015e48667f0f1def6ea8c75b77
+Time used: 18.09759211540222 seconds
+
+Balance for 994E0CFB-D8CD-4ABD-ADF7-C1EFE60302E2 is: 0.23
+
+==========================================================
+994E0CFB-D8CD-4ABD-ADF7-C1EFE60302E2 adds a new block to the chain
+Computing Proof of Work...
+Computation complete: 000be6742b87c17871532ea4c8ecfd8bea0c1560888dbdce774c24d0f13f94a5
+Time used: 0.4398808479309082 seconds
+
+Balance for 994E0CFB-D8CD-4ABD-ADF7-C1EFE60302E2 is: 0.46
+
+==========================================================
+994E0CFB-D8CD-4ABD-ADF7-C1EFE60302E2 adds a new block to the chain
+Computing Proof of Work...
+Computation complete: 0001948fc549b450ed6580e6d63097220bc7f1466450b1a56a55694555fca35f
+Time used: 27.193089962005615 seconds
+
+Balance for 994E0CFB-D8CD-4ABD-ADF7-C1EFE60302E2 is: 0.6900000000000001
+```

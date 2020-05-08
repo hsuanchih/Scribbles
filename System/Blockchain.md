@@ -200,3 +200,126 @@ struct Blockchain {
     }
 }
 ```
+---
+## Transcation
+Now let's put everything together using concrete transactions. To do so let's assume that our blockchain is used to track transactions of digital currency. Each transaction will consist of a sender and a receiver - both identified by their public key. A transaction will also include an amount that is to be transacted:
+
+```Swift
+typealias PublicKey = UUID
+struct Transaction : Codable {
+    let sender: PublicKey, receiver: PublicKey, amount: Double
+}
+```
+Also, a peer who wins out on the proof of work competition will receive a certain amount of reward - this reward from the system to the peer will take form in a new transaction. Let's add that to our blockchain implementation:
+```Swift
+// Blockchain (including Pending Transactions, Proof of Work, and Rewards)
+struct BlockChain {
+    
+    // Our blockchain now has a reward system:
+    // The reward amount is 0.23 for every Proof of Work completed
+    // assigned by the system
+    // We also add a helper method to compute the balance of a user
+    public static let publicKey = PublicKey()
+    private var reward : Double = 0.23
+    private mutating func reward(to peer: PublicKey) {
+        accept(Transaction(sender: Self.publicKey, receiver: peer, amount: reward))
+    }
+    public func balance(_ peer: PublicKey) -> Double {
+        blocks.reduce(0) {
+            do {
+                let transaction = try JSONDecoder().decode(Transaction.self, from: $1.data)
+                if transaction.receiver == peer {
+                    return $0+transaction.amount
+                }
+            } catch {}
+            return $0
+        }
+    }
+    
+    // We also track pending transactions not yet added to the blockchain
+    // Peers take pending transactions to construct a block, 
+    // and complete the proof of work to add transactions to the blockchain
+    private var transactions : [Transaction] = []
+    public mutating func accept(_ transaction: Transaction) {
+        transactions.append(transaction)
+    }
+    public var nextTransaction : Transaction? {
+        mutating get {
+            guard !transactions.isEmpty else { return nil }
+            return transactions.removeFirst()
+        }
+    }
+    
+    // Chains all the blocks in the blockchain
+    private var blocks : [Block] = []
+    
+    // We now add a difficulty level as part of Proof of Work
+    public var difficulty : Int
+    public init(difficulty: Int) {
+        self.difficulty = difficulty
+    }
+    
+    // Adds a new block to the blockchain
+    // If the block to add to the chain is not the genesis block,
+    // we want to link this block to the last block on the chain.
+    // In any case, we'll compute the hash value of the block based on 
+    // its content, and append the block to the chain
+    public mutating func add(_ block: Block, by peer: PublicKey) {
+        print(
+            """
+            
+            ==========================================================
+            \(peer) adds a new block to the chain
+            """
+        )
+        var block = block
+        if let last = blocks.last {
+            block.previous = last.hash
+        }
+        block.hash = proofOfWork(&block)
+        reward(to: peer)
+        blocks.append(block)
+    }
+    
+    // Proof of Work computation
+    // The difficulty level defines how many leading zeros must be in the
+    // hash output of block's content.
+    // We randomly pick a value as the nonce each time, and compute the
+    // hash value until we arrive at one that meets the difficulty level
+    private func proofOfWork(_ block: inout Block) -> String {
+        let prefix = String(Array(repeating: "0", count: difficulty))
+        
+        let startTime = Date().timeIntervalSince1970
+        print("Computing Proof of Work...")
+        var hash = Crypto.sha256(block.content)
+        repeat {
+            block.nonce = Int.random(in: 0...Int.max)
+            hash = Crypto.sha256(block.content)
+        } while !hash.hasPrefix(prefix)
+        print(
+            """
+            Computation complete: \(hash)
+            Time used: \((Date().timeIntervalSince1970-startTime)) seconds
+            
+            """
+        )
+        return hash
+    }
+    
+    // Validates whether all blocks in the chain are valid
+    // There are 2 conditions that must be met:
+    // * The current block's stored hash value should equal the
+    //   computed hash value from its content
+    // * The current block's hash value must equal its next block's
+    //   previous value
+    public func validate() -> Bool {
+        for index in 0..<blocks.count-1 {
+            let current = blocks[index], next = blocks[index+1]
+            if current.hash != Crypto.sha256(current.content) || current.hash != next.previous {
+                return false
+            }
+        }
+        return true
+    }
+}
+```

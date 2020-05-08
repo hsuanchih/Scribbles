@@ -90,3 +90,41 @@ struct Block {
     }
 }
 ```
+---
+## Blockchain
+
+Now let's create a blockchain to store some blocks. 
+
+```Swift
+struct BlockChain {
+    
+    // Chains all the blocks in the blockchain
+    private var blocks : [Block] = []
+    
+    // Returns the last block of the blockchain
+    public var last : Block? {
+        blocks.last
+    }
+    
+    // Adds a new block to the blockchain
+    public mutating func add(_ block: Block) {
+        blocks.append(block)
+    }
+    
+    // Validates whether all blocks in the chain are valid
+    // There are 2 conditions that must be met:
+    // * The current block's stored hash value should equal the 
+    //   computed hash value from its content
+    // * The current block's hash value must equal its next block's
+    //   previous value
+    public func validate() -> Bool {
+        for index in 0..<blocks.count-1 {
+            let current = blocks[index], next = blocks[index+1]
+            if current.hash != Crypto.sha256(current.content) || current.hash != next.previous {
+                return false
+            }
+        }
+        return true
+    }
+}
+```

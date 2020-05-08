@@ -70,19 +70,16 @@ struct BlockChain {
     private var blocks : [Block] = []
     
     // Adds a new block to the blockchain
+    // If the block to add to the chain is not the genesis block,
+    // we want to link this block to the last block on the chain.
+    // In any case, we'll compute the hash value of the block based on 
+    // its content, and append the block to the chain
     public mutating func add(_ block: Block) {
         var block = block
-        
-        // If the block to add to the chain is not the genesis block
-        // we want to link this block to the last block on the chain
         if let last = blocks.last {
             block.previous = last.hash
         }
-        
-        // Then compute the hash value of the block based on its content
         block.hash = Crypto.sha256(block.content)
-        
-        // And append the block to the chain
         blocks.append(block)
     }
     

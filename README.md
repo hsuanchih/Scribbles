@@ -15,7 +15,6 @@ I'm starting a scratchpad to digest various concepts, starting with the basics &
 
 ---
 ## Swift
-* [Promise & Future](Swift/Promise-And-Future.md)
 * [Property Wrapper](Swift/Property-Wrapper.md)
 * [Protocol Semantics & Existential Container](Swift/Protocol-Existential-Container.md)
 * [Reference & Value Semantics](Swift/References-And-Values.md)
@@ -34,9 +33,13 @@ I'm starting a scratchpad to digest various concepts, starting with the basics &
 
 ---
 ## Standards
-* [Blockchain](System/Blockchain.md)
 * [OSI Model](Computer-Network/OSI-Model.md)
 * [OAuth 2.0](Computer-Network/OAuth2.md)
+
+---
+## Playground
+* [Blockchain](Playground/Blockchain.md)
+* [Promise & Future](Playground/Promise-And-Future.md)
 
 ## Author
 

@@ -69,19 +69,26 @@ struct BlockChain {
     // Chains all the blocks in the blockchain
     private var blocks : [Block] = []
     
-    // Returns the last block of the blockchain
-    public var last : Block? {
-        blocks.last
-    }
-    
     // Adds a new block to the blockchain
     public mutating func add(_ block: Block) {
+        var block = block
+        
+        // If the block to add to the chain is not the genesis block
+        // we want to link this block to the last block on the chain
+        if let last = blocks.last {
+            block.previous = last.hash
+        }
+        
+        // Then compute the hash value of the block based on its content
+        block.hash = Crypto.sha256(block.content)
+        
+        // And append the block to the chain
         blocks.append(block)
     }
     
     // Validates whether all blocks in the chain are valid
     // There are 2 conditions that must be met:
-    // * The current block's stored hash value should equal the 
+    // * The current block's stored hash value should equal the
     //   computed hash value from its content
     // * The current block's hash value must equal its next block's
     //   previous value

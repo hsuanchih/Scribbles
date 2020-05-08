@@ -200,8 +200,9 @@ struct Blockchain {
     }
 }
 ```
+
 ---
-## Transcation
+## Transaction
 Now let's put everything together using concrete transactions. To do so let's assume that our blockchain is used to track transactions of digital currency. Each transaction will consist of a sender and a receiver - both identified by their public key. A transaction will also include an amount that is to be transacted:
 
 ```Swift
@@ -210,6 +211,9 @@ struct Transaction : Codable {
     let sender: PublicKey, receiver: PublicKey, amount: Double
 }
 ```
+
+---
+## Reward System
 Also, a peer who wins out on the proof of work competition will receive a certain amount of reward - this reward from the system to the peer will take form in a new transaction. Let's add that to our blockchain implementation:
 ```Swift
 // Blockchain (including Pending Transactions, Proof of Work, and Rewards)
@@ -287,15 +291,17 @@ struct BlockChain {
     // We randomly pick a value as the nonce each time, and compute the
     // hash value until we arrive at one that meets the difficulty level
     private func proofOfWork(_ block: inout Block) -> String {
-        let prefix = String(Array(repeating: "0", count: difficulty))
+        let prefix = String(Array(repeating: "0", count: difficulty)),
+        startTime = Date().timeIntervalSince1970
         
-        let startTime = Date().timeIntervalSince1970
         print("Computing Proof of Work...")
+        
         var hash = Crypto.sha256(block.content)
         repeat {
             block.nonce = Int.random(in: 0...Int.max)
             hash = Crypto.sha256(block.content)
         } while !hash.hasPrefix(prefix)
+        
         print(
             """
             Computation complete: \(hash)
@@ -303,6 +309,7 @@ struct BlockChain {
             
             """
         )
+        
         return hash
     }
     

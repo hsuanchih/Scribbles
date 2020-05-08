@@ -128,3 +128,16 @@ struct BlockChain {
     }
 }
 ```
+This blockchain implementation allows us to add new blocks to the chain & validate existing blocks. Things seem to fall nicely into place now, but there's a slight problem:
+
+Recall from earlier that modifying the content of a block in the chain will invalidate all the block that are after it. A simple way to restore the validity of the chain after modifying a block is to re-compute the hash values of all the blocks follow the modified block. We want to prevent this from happening at all costs, but our current blockchain makes it too easy to add a new block to the chain. We want to increase the difficulty for adding a new block to the chain, and we can do so with something called a proof of work.
+
+---
+## Proof of Work
+The intention of a proof of work is to slow down the process of adding a new block to the chain by introducing some difficulty. This is done by setting requirements that are computation heavy but rather easy to validate. One example of a proof of work is to require the computed hash value of a block to have a certain number of leading zeros for the block to be considered valid for chaining.
+
+Previously we generate the hash value of our block based on the content of the block. If the content doesn't change, neither will its hash value. Needless to say, we'll need to introduce a new variable into our hash computation - a random value referred to as a __nonce__. Here's what our blockchain implementation looks like with proof of work.
+
+```Swift
+
+```

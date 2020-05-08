@@ -64,7 +64,7 @@ struct Block {
 Now let's create a blockchain to store some blocks. 
 
 ```Swift
-struct BlockChain {
+struct Blockchain {
     
     // Chains all the blocks in the blockchain
     private var blocks : [Block] = []
@@ -111,5 +111,92 @@ The intention of a proof of work is to slow down the process of adding a new blo
 Previously we generate the hash value of our block based on the content of the block. If the content doesn't change, neither will its hash value. Needless to say, we'll need to introduce a new variable into our hash computation - a random value referred to as a __nonce__. Here's what our blockchain implementation looks like with proof of work.
 
 ```Swift
+// Block (including nonce)
+struct Block {
+    
+    // Body of a block includes:
+    // * Hash value of the previous block
+    // * Time at which the block is created
+    // * The actual data stored by the block
+    // * Hash value of the block
+    public var previous : String = ""
+    public let createdAt : TimeInterval = Date().timeIntervalSince1970
+    public let data : Data
+    public var hash : String = ""
+    
+    // We now add a nonce for computing Proof of Work
+    public var nonce : Int = 0
+    
+    // Create a block to store some data, the data
+    // to store can be of any type as long as it conforms to Encodable
+    public init?<T: Encodable>(data: T) {
+        do { self.data = try JSONEncoder().encode(data) }
+        catch { return nil }
+    }
+    
+    // Content used to compute the hash value of the current block,
+    // now including the nonce for Proof of Work
+    public var content : String {
+        "\(previous) \(createdAt) \(String(data: data, encoding: .utf16)!) \(nonce)"
+    }
+}
 
+
+// Blockchain (including Proof of Work)
+struct Blockchain {
+    
+    // Chains all the blocks in the blockchain
+    private var blocks : [Block] = []
+    
+    // We now add a difficulty level as part of Proof of Work
+    public var difficulty : Int
+    public init(difficulty: Int) {
+        self.difficulty = difficulty
+    }
+    
+    // Adds a new block to the blockchain
+    // If the block to add to the chain is not the genesis block,
+    // we want to link this block to the last block on the chain.
+    // In any case, we'll compute the hash value of the block based on 
+    // its content, and append the block to the chain
+    public mutating func add(_ block: Block) {
+        var block = block
+        if let last = blocks.last {
+            block.previous = last.hash
+        }
+        block.hash = proofOfWork(&block)
+        blocks.append(block)
+    }
+    
+    // Validates whether all blocks in the chain are valid
+    // There are 2 conditions that must be met:
+    // * The current block's stored hash value should equal the
+    //   computed hash value from its content
+    // * The current block's hash value must equal its next block's
+    //   previous value
+    public func validate() -> Bool {
+        for index in 0..<blocks.count-1 {
+            let current = blocks[index], next = blocks[index+1]
+            if current.hash != Crypto.sha256(current.content) || current.hash != next.previous {
+                return false
+            }
+        }
+        return true
+    }
+    
+    // Proof of Work computation
+    // The difficulty level defines how many leading zeros must be in the
+    // hash output of block's content.
+    // We randomly pick a value as the nonce each time, and compute the
+    // hash value until we arrive at one that meets the difficulty level
+    private func proofOfWork(_ block: inout Block) -> String {
+        let prefix = String(Array(repeating: "0", count: difficulty))
+        var hash = Crypto.sha256(block.content)
+        repeat {
+            block.nonce = Int.random(in: 0...Int.max)
+            hash = Crypto.sha256(block.content)
+        } while !hash.hasPrefix(prefix)
+        return hash
+    }
+}
 ```

@@ -22,6 +22,11 @@ I'm starting a scratchpad to digest various concepts, starting with the basics &
 * [Type Erasure & Protocol with Associated Types](Swift/Type-Erasure-And-Protocol-Associated-Types.md)
 
 ---
+## Playground
+* [Blockchain](Playground/Blockchain.md)
+* [Promise & Future](Playground/Promise-And-Future.md)
+
+---
 ## Design Patterns
 * [Creational](Design-Patterns/Creational.md)
 * [Behavioral](Design-Patterns/Behavioral.md)
@@ -35,11 +40,6 @@ I'm starting a scratchpad to digest various concepts, starting with the basics &
 ## Standards
 * [OSI Model](Computer-Network/OSI-Model.md)
 * [OAuth 2.0](Computer-Network/OAuth2.md)
-
----
-## Playground
-* [Blockchain](Playground/Blockchain.md)
-* [Promise & Future](Playground/Promise-And-Future.md)
 
 ## Author
 

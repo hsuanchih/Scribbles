@@ -29,4 +29,5 @@ The run-loop receives events from 2 sources:
   * Custom Input Sources
   * Cocoa Perform Selector Sources
 * Timer
-Additionally, we can also add observers to the run-loop.
+
+<img src="images/runloop.jpg" height="280"/>

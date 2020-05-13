@@ -14,19 +14,19 @@ The only run loop that's active by default is the main run-loop - the run-loop o
 ---
 ## Run-Loop Modes
 The term mode here is a bit misleading with respect to what run-loop modes really are. 
-A run-loop mode is a grouping of items needed to be processed by the run-loop. Several run-loop mode exists, but the 2 in particular that are of our interest:
-* `RunLoop.Mode.tracking` - User interaction related items are grouped into this mode
+A run-loop mode is a grouping of events needed to be processed by the run-loop. Several run-loop mode exists, but the 2 in particular that are of our interest:
+* `RunLoop.Mode.tracking` - User interaction related events are grouped into this mode
 * `RunLoop.Mode.default` - Everything else not user interaction related is grouped into this mode
-A run-loop runs in one of these modes until after all items from the mode are processed.  
-There are times when we need the run-loop to process run-loop items regardless of the mode it is in. 
+A run-loop runs in one of these modes until after all events from the mode are processed.  
+There are times when we need the run-loop to process run-loop events regardless of the mode it is in. 
 A logical mode `RunLoop.Mode.common` caters this particular scenario.
 
 ---
-## Run-Loop Items
-There are 3 types of run-loop items that we can add to a run-loop mode:
-* Source - there are 3 types of Sources
+## Run-Loop Event Sources
+The run-loop receives events from 2 sources:
+* Input - there are 3 types of input sources
   * Port-Based Sources
   * Custom Input Sources
   * Cocoa Perform Selector Sources
 * Timer
-* Observer
+Additionally, we can also add observers to the run-loop.

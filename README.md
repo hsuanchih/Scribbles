@@ -10,6 +10,7 @@ I'm starting a scratchpad to digest various concepts, starting with the basics &
 * [Combine Subscribers - Assign & Sink](Cocoa/Combine-Subscribers-Assign-Sink.md)
 * [Concurrency, GCD & Operations](Cocoa/Concurrency-GCD-Operations.md)
 * [Event-Handling & Responder Chain](Cocoa/Event-Handling-And-Responder-Chain.md)
+* [Run-Loop](Cocoa/Run-Loop.md)
 * [SwiftUI - Data Flow](Cocoa/SwiftUI-Data-Flow.md)
 * [SwiftUI - Presentation](Cocoa/SwiftUI-Presentation.md)
 

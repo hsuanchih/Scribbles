@@ -5,7 +5,7 @@
 Image Source: [TheTechWin](https://thetechwin.wordpress.com/2018/06/23/what-is-osi-model/)
 
 ---
-## Transport
+## Session
 ### TCP 3-Way Handshake
 ![TCP 3-Way Handshake](images/tcp-three-way-handshake.jpg)
 

@@ -210,3 +210,9 @@ The print-out from the observer let's us visualize the order in which events are
 <img src="images/run-loop-observer.png" height="400"/>
 
 Image Source: [Advanced Mac OS X Programming: The Big Nerd Ranch Guide by Mark Dalrymple., O'Reilly](https://www.oreilly.com/library/view/advanced-mac-os/9780321706560/ch15s06.html)
+
+Apart from allowing us to better understand what events are handled when, what are observers good for? We can use observers inject logic to be performed by the run-loop on each iteration, thereby controlling what work and how much of it is done in one loop. 
+
+For example, the system adds an observer to listen on the main run-loop's `CFRunLoopActivity.entry` to create the initial auto-release pool, and another observer to listen on the main run-loop's `CFRunLoopActivity.beforeWaiting` to flush the existing auto-release pool before starting anew - this same observer also listens for the main run-loop's `CFRunLoopActivity.exit` state to flush the auto-release pool for the last time when the main run-loop exits.
+
+Another example would be to use the observer to control the amount of content rendering we want to perform in each pass of the run-loop. Recall that a run-loop can only run in one mode at a time - a one-off content rendering pass consuming a lot of time might end up blocking the run-loop from handling user interactive events, causing the user interaction to run prickly. We can use an observer to enforce incremental content render, thus preventing default mode from hijacking the run-loop.

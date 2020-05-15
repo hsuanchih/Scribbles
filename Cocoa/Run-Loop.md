@@ -32,6 +32,8 @@ The run-loop receives events from 2 sources:
 
 <img src="images/runloop.jpg" height="280"/>
 
+Image Source: [Apple](https://developer.apple.com/library/archive/documentation/Cocoa/Conceptual/Multithreading/RunLoopManagement/RunLoopManagement.html#//apple_ref/doc/uid/10000057i-CH16-SW3)
+
 ---
 ## Timer Source
 Let's see some practical examples with the timer source. One of the ways to schedule a timer would be as follows:
@@ -206,3 +208,5 @@ CFRunLoopAddObserver(
 
 The print-out from the observer let's us visualize the order in which events are handled by the run-loop:
 <img src="images/run-loop-observer.png" height="400"/>
+
+Image Source: [Advanced Mac OS X Programming: The Big Nerd Ranch Guide by Mark Dalrymple., O'Reilly](https://www.oreilly.com/library/view/advanced-mac-os/9780321706560/ch15s06.html)

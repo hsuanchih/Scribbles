@@ -165,3 +165,44 @@ thread?.start()
 // The thread can now be deallocated.
 thread = nil
 ```
+---
+## Adding Observer to a Run-Loop
+Apart from being able to add sources to a run-loop, we can optionally add observers to the run-loop. Let's add an observer to the run-loop and see the kind of information we can extract from the observer.
+
+```Swift
+// Here we resort to Core Foundation for the purpose of adding an observer.
+// We first create an observer to monitor all run-loop activities, and
+// print to the console the current state of the run-loop.
+let runLoopStateObserver = CFRunLoopObserverCreateWithHandler(
+    kCFAllocatorDefault, 
+    CFRunLoopActivity.allActivities.rawValue, 
+    true, 0) { (observer, activity) in
+    switch activity {
+    case .entry:
+        print("entry")
+    case .beforeWaiting:
+        print("beforeWaiting")
+    case .afterWaiting:
+        print("afterWaiting")
+    case .beforeTimers:
+        print("beforeTimers")
+    case .beforeSources:
+        print("beforeSources")
+    case .exit:
+        print("exit")
+    default:
+        print("\(activity)")
+    }
+}
+
+// Now we add the observer to the current (main) run-loop in
+// default mode
+CFRunLoopAddObserver(
+    CFRunLoopGetCurrent(),
+    runLoopStateObserver,
+    CFRunLoopMode.defaultMode
+)
+```
+
+The print-out from the observer let's us visualize the order in which events are handled by the run-loop:
+<img src="images/run-loop-observer.png" height="400"/>

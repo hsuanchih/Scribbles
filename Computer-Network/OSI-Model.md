@@ -18,3 +18,7 @@ Image Source: [CsPsProtocol](https://www.cspsprotocol.com/tcp-three-way-handshak
 3. __Client ACK:__ The client acknowldeges that it has received the `SYN` from the server by responding with an `ACK` of value `m+1`.
 
 On receiving the `ACK` from the client, the server considers the connection opened, and allocates buffer for receiving packets from the client.
+
+---
+## Transport
+### Stop & Wait

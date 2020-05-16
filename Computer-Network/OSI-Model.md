@@ -22,3 +22,4 @@ On receiving the `ACK` from the client, the server considers the connection open
 ---
 ## Transport
 ### Stop & Wait
+<img src="images/stop-and-wait.png" height="350"/>

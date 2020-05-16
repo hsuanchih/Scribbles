@@ -30,3 +30,5 @@ The sender waits for `ACK` from the receiver on each transmit. If `ACK` isn't re
 
 ### Sliding Window
 <img src="images/sliding-window-protocol.jpg" height="350"/>
+
+The sender can send up to `n` packets before receiving an `ACK` from the receiver. Each `ACK` from the receiver makes room for subsequent packets that can be sent by the sender.

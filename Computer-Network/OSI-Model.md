@@ -36,5 +36,9 @@ Image Source: [GeeksForGeeks](https://www.geeksforgeeks.org/sliding-window-proto
 The sender can send up to `W` packets before receiving an `ACK` from the receiver. Each `ACK` from the receiver makes room for subsequent packets that can be sent by the sender. Packet loss & timeout can be handled the following ways:
 
 #### Go Back N:
-* Using `ACK` - When `ACK` for sequence number `N` times out, re-transmit packets starting at number `N`
-* Using `NACK` - When `NACK` for sequence number `N` is received, re-transmit packets starting at number `N`
+* Using `ACK` - When `ACK` for sequence number `N` times out, re-transmit packets starting at number `N`.
+* Using `NACK` - When `NACK` for sequence number `N` is received, re-transmit packets starting at number `N`.
+
+#### Selective Repeat:
+* Receiver assume most of the time packets are going to arrive in sequential order.
+* If packet `N+1` arrives before packet `N`, the receiver sends `NACK` for `N` alongside `ACK` for `N+1`.

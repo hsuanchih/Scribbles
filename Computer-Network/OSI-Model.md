@@ -27,3 +27,6 @@ On receiving the `ACK` from the client, the server considers the connection open
 Image Source: [GeeksForGeeks](https://www.geeksforgeeks.org/stop-and-wait-arq/)
 
 The sender waits for `ACK` from the receiver on each transmit. If `ACK` isn't received after a timeout period, the same packet is re-transmitted.
+
+### Sliding Window
+<img src="images/sliding-window-protocol.jpg" height="350"/>

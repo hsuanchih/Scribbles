@@ -33,4 +33,7 @@ The sender waits for `ACK` from the receiver on each transmit. If `ACK` isn't re
 
 Image Source: [GeeksForGeeks](https://www.geeksforgeeks.org/sliding-window-protocol-set-3-selective-repeat/)
 
-The sender can send up to `n` packets before receiving an `ACK` from the receiver. Each `ACK` from the receiver makes room for subsequent packets that can be sent by the sender.
+The sender can send up to `W` packets before receiving an `ACK` from the receiver. Each `ACK` from the receiver makes room for subsequent packets that can be sent by the sender. Packet loss & timeout can be handled the following ways:
+__Go Back N__:</br>
+* Using `ACK` - When `ACK` for sequence number `N` times out, re-transmit packets starting at number `N`
+* Using `NACK` - When `NACK` for sequence number `N` is received, re-transmit packets starting at number `N`

@@ -39,7 +39,7 @@ Having established a TCP connection established between the client & the server,
 2. On receiving `CLIENT HELLO`, the server responds with a `SERVER HELLO` including:
    * Selected cipher to use based on the cipher suite supported by the client
    * The server's certificate containing the public key of the server. This public key will be used to bootstrap the encrypted data exchange.
-3. The client receives the `SERVER HELLO` and validates the server certificate, and sends `PRE MASTER SECRET` to the server. For simplicity, think of this step as the client picking a symmetric key that will be used for symmetric data crypto from here on. The client then encrypts this symmetric key using the server's public key and sends it to the server.
+3. The client receives the `SERVER HELLO` and validates the server certificate, and sends `PRE MASTER SECRET` to the server. For sake of simplicity, think of this step as the client picking a symmetric key that will be used for symmetric data crypto from here on. The client then encrypts this symmetric key using the server's public key and sends it to the server.
 4. The server is the only party able to decrypt the message containing the symmetric key from the client - only it has the private key that pairs with the public key used by the client. Once the message is decrypted, the server now has the symmetric key that it can use to exchange data with the client.
 
 ---

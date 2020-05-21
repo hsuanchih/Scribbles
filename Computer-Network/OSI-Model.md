@@ -27,6 +27,7 @@ There are various options that lets us encrypt data we send & have the recipient
 We can't send the encryption key in the clear because an eavesdropper can listen in on the line and intercept the encryption key. Asymmetric cryptography solves problems with key exchange, but we don't want to use it for all data exchange because it is too computationally demanding. Is there a middle ground where we can use asymmetric cryptography to bootstrap our symmetric key exchange?
 
 This is where the SSL 4-way handshake comes into play:
+
 <img src="images/ssl-handshake.png" height="450"/>
 
 Image Source: [MSDN, Microsoft](https://blogs.msdn.microsoft.com)

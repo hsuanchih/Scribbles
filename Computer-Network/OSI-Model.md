@@ -19,6 +19,15 @@ Image Source: [CsPsProtocol](https://www.cspsprotocol.com/tcp-three-way-handshak
 
 On receiving the `ACK` from the client, the server considers the connection opened, and allocates buffer for receiving packets from the client.
 
+### SSL 4-Way Handshake
+Establishing a TCP connection allows us to send data in the clear, but we want to avoid communication in the clear at all costs because this introduces privacy & security issues. The solution is to encrypt the data before sending it. 
+
+There are various options that lets us encrypt data we send & have the recipient decrypt the data when received. Either symmetric or asymmetric cryptography can do the job equally well, but for efficiency reasons we want to use symmetric cryptography if it is at all possible. So what would make symmetric cryptography not possible in our case? The road-block is the exchange of encrytion key. 
+
+We can't send the encryption key in the clear because an eavesdropper can listen in on the line and intercept the encryption key. Asymmetric cryptography solves problems with key exchange, but we don't want to use it for all data exchange because it is too computationally demanding. Is there a middle ground where we can use asymmetric cryptography to bootstrap our symmetric key exchange?
+
+This is where the SSL 4-way handshake comes into play:
+
 ---
 ## Transport
 ### Stop & Wait

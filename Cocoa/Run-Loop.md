@@ -3,7 +3,7 @@
 ## What's a Run-Loop?
 A run-loop is an event processing mechanism that comes out-of-the-box with each thread. 
 We can think of threads as checkout lanes at the supermarket, and a run-loop as the cashier behind the register.
-The cashier is either busy checking out items we're unloading from our shopping cart, and otherwise resting if there are no customers.
+The cashier is either busy checking out items we're unloading from our shopping cart, or otherwise resting if there are no customers.
 
 Unlike a typical program that runs to the end and exits, 
 our application stays active after launch and remains responsive to touch & network events - 

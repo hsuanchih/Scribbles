@@ -1,6 +1,6 @@
 # Promise & Future
 ---
-The motivation for this chapter is an attempt to clean up code smells in asynchronous call chaining. Imagine the scenario whereby we want to send multiple network requests, but not one after another - we want to send a request only after a response is received from the previous request. How would we chain all these requests together? 
+The motivation for this entry is an attempt to clean up code smells in asynchronous call chaining. Imagine the scenario whereby we want to send multiple network requests, but not one after another - we want to send a request only after a response is received from the previous request. How would we chain all these requests together? 
 
 The intuitive solution is to start a request in the callback of the previous request, and soon enough we see that pattern of closures within closures within closures - a callback hell. There's certainly more than one way to cleanup the mess, but here we'll be looking at using promise & future to solve this problem.
 

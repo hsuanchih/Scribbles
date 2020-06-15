@@ -6,7 +6,7 @@ The intuitive solution is to start a request in the callback of the previous req
 
 So what's the difference between a __Promise__ and a __Future__? Behavior wise they are the same. Conceptually, however, a __Promise__ is a token of commitment to honor an agreement in the __Future__, despite not being able to do so at the time of making the promise. And that is how promises & futures relate to each other. 
 
-We've probably seen promises/futures in action from the past, but in this chapter, we're going to see how they work under the hood. Let's start with a simple promise and build on it.
+We've probably seen promises/futures in action from the past, but in this entry, we're going to see how they work under the hood. Let's start with a simple promise and build on it.
 
 ```Swift
 // The most primitive form of a Promise

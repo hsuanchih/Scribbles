@@ -6,6 +6,7 @@
     <li><a href="#Iterator">Iterator</a></li>
     <li><a href="#Mediator">Mediator</a></li>
     <li><a href="#Memento">Memento</a></li>
+    <li><a href="#Observer">Observer</a></li>
     <li><a href="#State">State</a></li>
 </ul></h3>
 
@@ -438,6 +439,79 @@ for _ in 1...10 {
 // 2 2020-04-24T03:23:36Z
 // 0 2020-04-24T03:23:35Z
 // 1 2020-04-24T03:23:34Z
+```
+---
+## Observer
+
+__Observer__ allows for an observer to observe changes on an observable subject.
+
+__Example__
+```Swift
+// The Obervable property wrapper allows observers to create bindings
+// with its changes through a callback
+@propertyWrapper
+class Observable<Value> {
+    public typealias ValueChangeHandler = (Value)->Void
+    private var valueChangeHandlers : [ValueChangeHandler] = []
+    public init(wrappedValue: Value) {
+        self.wrappedValue = wrappedValue
+    }
+    var wrappedValue : Value {
+        didSet { valueChangeHandlers.forEach { $0(wrappedValue) } }
+    }
+    var projectedValue : Observable<Value> { self }
+    
+    func bind(_ valueChangeHandler: @escaping ValueChangeHandler) {
+        valueChangeHandlers.append(valueChangeHandler)
+    }
+}
+
+// The observed subject holds the observable value that might be of interest
+// to the observer
+final class ObservedSubject<Value> {
+    @Observable var value : Value
+    public init(_ value: Value) {
+        self.value = value
+    }
+    public func bind(_ valueChangeHandler: @escaping (Value)->Void) {
+        $value.bind(valueChangeHandler)
+    }
+}
+
+// An observer prototype
+struct Observer<Value> {
+    let id : Int
+    func handler(_ value: Value) {
+        print("Observer \(id): \(value)")
+    }
+}
+
+// Use Case:
+// Create an observed subject
+let observedSubject = ObservedSubject(0)
+
+// And bind 10 arbitrary observers to the subject
+for observerId in 1...10 {
+    observedSubject.bind(Observer<Int>(id: observerId).handler)
+}
+
+// Update the observable with values from 1 to 10
+for i in 1...10 {
+    observedSubject.value = i
+}
+
+// Console Output:
+// Observer 1: 1
+// Observer 2: 1
+// Observer 3: 1
+// Observer 4: 1
+// .
+// .
+// .
+// Observer 7: 10
+// Observer 8: 10
+// Observer 9: 10
+// Observer 10: 10
 ```
 ---
 ## State

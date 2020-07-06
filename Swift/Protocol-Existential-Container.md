@@ -160,10 +160,10 @@ What would the protocol witness table look like now?
 Line : 
 Drawable, GeometricAttribute                    
  ________________________             _______________________
-||                      ||     |---->| draw:                 |  Line : Drawable PWT
+||                      ||     |---->| length:               |  Line : GeometricAttribute
 ||______________________||     |     |_______________________|
-||     valueBuffer      ||     |     | length:               |  Line : GeometricAttribute
-||______________________||     |     |_______________________|
+||     valueBuffer      ||     |     
+||______________________||     |     
 ||                      ||     |
 ||______________________||     | 
 |  value witness table  ||     | 
@@ -172,4 +172,4 @@ Drawable, GeometricAttribute
 |________________________|
 
 ```
-We would have 2 protocol witness tables in the lookup. Here `length` is a computed property, and equivalently represented as a method with no parameters.
+The protocol witness table in the lookup would be that declared in protocol `GeometricAttribute`. Why? Because we've declared line to be of type `GeometricAttribute`.

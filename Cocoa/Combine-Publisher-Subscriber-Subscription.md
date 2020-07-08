@@ -5,7 +5,7 @@ A lot of the times we're interested in receiving updates about value and state c
 ---
 ## Fundamental Building Blocks
 
-Let's first establish some terminology forming the fundamental building blocks of combine:
+Let's first establish some terminologies forming the fundamental building blocks of combine:
 * __Subscriber__ - Entity interested in the value changes, and expresses its interest by subscribing to a publisher
 * __Subscription__ - Entity representing the connection from a subscriber to a publisher
 * __Publisher__ - Entity responsible for defining how values/errors are produced, but not necessarily the content producer itself

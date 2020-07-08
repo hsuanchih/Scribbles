@@ -39,7 +39,7 @@ drawables.append(Line(x1: 0, y1: 0, x2: 3, y2: 5))
 drawables.forEach { $0.draw() }
 ```
 The code above brings about 2 interesting questions:
-1. The `drawables` array can store elements of different sizes (ie, instances `Point` & `Line`) - very atypical for collections that support random access. How does it manage constant-time memory access with variable memory offsets?
+1. It appears that the `drawables` array is storing elements of different sizes (ie, instances `Point` & `Line`) - very atypical for collections that support random access. How does it manage constant-time memory access with variable memory offsets?
 2. `Point` & `Line` each implements its own `draw()` method, so how does the correct `draw()` method get called?
 
 We're going to dissolve these mysteries.

@@ -2,7 +2,7 @@
 
 I'm starting a scratchpad to digest various concepts, starting with the basics & building on them.
 
-Scribbles now has its own GitHub Pages site at: https://hsuanchih.github.io/scribbles/.
+Scribbles now has its own GitHub Pages site at: https://hsuanchih.github.io/Scribbles/.
 
 ---
 ## Cocoa

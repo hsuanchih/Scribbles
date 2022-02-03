@@ -32,7 +32,6 @@ github_username:  hsuanchih
 # Build settings
 # theme: minima
 remote_theme: pmarsceill/just-the-docs
-theme: "just-the-docs"
 plugins:
   - jekyll-feed
 markdown: kramdown

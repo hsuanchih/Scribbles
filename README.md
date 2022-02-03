@@ -2,45 +2,47 @@
 
 I'm starting a scratchpad to digest various concepts, starting with the basics & building on them.
 
+Scribbles now has its own GitHub Pages site at: https://hsuanchih.github.io/scribbles/.
+
 ---
 ## Cocoa
-* [Auto Layout](Cocoa/Auto-Layout.md)
-* [Combine - Publisher, Subscriber & Subscription](Cocoa/Combine-Publisher-Subscriber-Subscription.md)
-* [Combine Publishers - Operator, Subject & @Published](Cocoa/Combine-Publishers-Operator-Subject-Published.md)
-* [Combine Subscribers - Assign & Sink](Cocoa/Combine-Subscribers-Assign-Sink.md)
-* [Concurrency, GCD & Operations](Cocoa/Concurrency-GCD-Operations.md)
-* [Event-Handling & Responder Chain](Cocoa/Event-Handling-And-Responder-Chain.md)
-* [Run-Loop](Cocoa/Run-Loop.md)
-* [SwiftUI - Data Flow](Cocoa/SwiftUI-Data-Flow.md)
-* [SwiftUI - Presentation](Cocoa/SwiftUI-Presentation.md)
+* [Auto Layout](docs/Cocoa/Auto-Layout.md)
+* [Combine - Publisher, Subscriber & Subscription](docs/Cocoa/Combine-Publisher-Subscriber-Subscription.md)
+* [Combine Publishers - Operator, Subject & @Published](docs/Cocoa/Combine-Publishers-Operator-Subject-Published.md)
+* [Combine Subscribers - Assign & Sink](docs/Cocoa/Combine-Subscribers-Assign-Sink.md)
+* [Concurrency, GCD & Operations](docs/Cocoa/Concurrency-GCD-Operations.md)
+* [Event-Handling & Responder Chain](docs/Cocoa/Event-Handling-And-Responder-Chain.md)
+* [Run-Loop](docs/Cocoa/Run-Loop.md)
+* [SwiftUI - Data Flow](docs/Cocoa/SwiftUI-Data-Flow.md)
+* [SwiftUI - Presentation](docs/Cocoa/SwiftUI-Presentation.md)
 
 ---
 ## Swift
-* [Property Wrapper](Swift/Property-Wrapper.md)
-* [Protocol Semantics & Existential Container](Swift/Protocol-Existential-Container.md)
-* [Reference & Value Semantics](Swift/References-And-Values.md)
-* [Method Dispatch](Swift/Method-Dispatch.md)
-* [Type Erasure & Protocol with Associated Types](Swift/Type-Erasure-And-Protocol-Associated-Types.md)
+* [Property Wrapper](docs/Swift/Property-Wrapper.md)
+* [Protocol Semantics & Existential Container](docs/Swift/Protocol-Existential-Container.md)
+* [Reference & Value Semantics](docs/Swift/References-And-Values.md)
+* [Method Dispatch](docs/Swift/Method-Dispatch.md)
+* [Type Erasure & Protocol with Associated Types](docs/Swift/Type-Erasure-And-Protocol-Associated-Types.md)
 
 ---
 ## Playground
-* [Blockchain](Playground/Blockchain.md)
-* [Promise & Future](Playground/Promise-And-Future.md)
+* [Blockchain](docs/Playground/Blockchain.md)
+* [Promise & Future](docs/Playground/Promise-And-Future.md)
 
 ---
 ## Design Patterns
-* [Creational](Design-Patterns/Creational.md)
-* [Behavioral](Design-Patterns/Behavioral.md)
-* [Structural](Design-Patterns/Structural.md)
+* [Creational](docs/Design-Patterns/Creational.md)
+* [Behavioral](docs/Design-Patterns/Behavioral.md)
+* [Structural](docs/Design-Patterns/Structural.md)
 
 ---
 ## System
-* [P2P Network](System/P2P-Network.md)
+* [P2P Network](docs/System/P2P-Network.md)
 
 ---
 ## Standards
-* [OSI Model](Computer-Network/OSI-Model.md)
-* [OAuth 2.0](Computer-Network/OAuth2.md)
+* [OSI Model](docs/Standards/OSI-Model.md)
+* [OAuth 2.0](docs/Standards/OAuth2.md)
 
 ## Author
 

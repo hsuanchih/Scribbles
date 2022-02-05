@@ -42,6 +42,6 @@ from re-arrangement,
 
 \\(= \lim\limits_{h \to 0} \cfrac{u(x+h) - u(x)}{h} + \lim\limits_{h \to 0} \cfrac{v(x+h) - v(x)}{h}\\)
 
-accroding to first principles,
+back to first principles,
 
 \\(= u\prime(x) + v\prime(x)\\)

@@ -24,16 +24,24 @@ let \\(f(x) = u(x) + v(x)\\),
 
 then \\(f\prime(x) = u\prime(x) + v\prime(x)\\)
 
-Proof using first principles:
+__Proof:__
 
-$$f\prime(x) = \lim\limits_{h \to 0} \cfrac{f(x+h) - f(x)}{h}$$
+Using first principles:
 
-$$= \lim\limits_{h \to 0} \cfrac{(u(x+h) + v(x+h)) - (u(x) + v(x))}{h}$$
+\\(f\prime(x) = \lim\limits_{h \to 0} \cfrac{f(x+h) - f(x)}{h}\\)
 
-$$= \lim\limits_{h \to 0} \cfrac{u(x+h) + v(x+h) - u(x) - v(x)}{h}$$
+by substitution,
 
-$$= \lim\limits_{h \to 0} \cfrac{(u(x+h) - u(x)) + (v(x+h) - v(x))}{h}$$
+\\(= \lim\limits_{h \to 0} \cfrac{(u(x+h) + v(x+h)) - (u(x) + v(x))}{h}\\)
 
-$$= \lim\limits_{h \to 0} \cfrac{u(x+h) - u(x)}{h} + \lim\limits_{h \to 0} \cfrac{v(x+h) - v(x)}{h}$$
+\\(= \lim\limits_{h \to 0} \cfrac{u(x+h) + v(x+h) - u(x) - v(x)}{h}\\)
 
-$$= u\prime(x) + v\prime(x)$$
+from re-arrangement,
+
+\\(= \lim\limits_{h \to 0} \cfrac{(u(x+h) - u(x)) + (v(x+h) - v(x))}{h}\\)
+
+\\(= \lim\limits_{h \to 0} \cfrac{u(x+h) - u(x)}{h} + \lim\limits_{h \to 0} \cfrac{v(x+h) - v(x)}{h}\\)
+
+accroding to first principles,
+
+\\(= u\prime(x) + v\prime(x)\\)

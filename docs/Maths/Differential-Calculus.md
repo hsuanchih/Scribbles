@@ -106,3 +106,60 @@ parent: Maths
 \\(\text{diffrentiate using first principles,}\\)
 
 \\(\boxed{f\prime(x) = 64x^3 + 16x}\\)
+
+---
+### Chain (Function of a Function) Rule
+<br/>
+\\(\text{if }\boxed{f(x) = u(g(x))},\text{ then }\boxed{f\prime(x) = u\prime(g(x)) \cdot g\prime(x) = \frac{du}{dg} \cdot \frac{dg}{dx}}\\)
+
+---
+
+[comment]: Proof - Chain Rule
+\\(\underline{\bold{Proof:}}\\)
+
+\\(\text{Using first principles:}\\)
+
+\\(f\prime(x) = \lim\limits_{h \to 0} \cfrac{f(x+h) - f(x)}{h}\\)
+
+\\(\text{by substitution,}\\)
+
+\\(f\prime(x) = \lim\limits_{h \to 0} \cfrac{u(g(x+h)) - u(g(x))}{h}\\)
+
+\\(\text{re-writing the denominator} \space h \space \text{as} \space (x+h)-x,\\)
+
+\\(f\prime(x) = \lim\limits_{h \to 0} \cfrac{u(g(x+h))-u(g(x))}{(x+h)-x}\\)
+
+\\(\text{multiply by}\space \cfrac{g(x+h)-g(x)}{g(x+h)-g(x)},\\)
+
+\\(f\prime(x) = \lim\limits_{h \to 0} \cfrac{u(g(x+h))-u(g(x))}{(x+h)-x} \cdot \cfrac{g(x+h)-g(x)}{g(x+h)-g(x)}\\)
+
+\\(\text{re-arrangement the denominator,}\\)
+
+\\(f\prime(x) = \lim\limits_{h \to 0} \cfrac{u(g(x+h))-u(g(x))}{g(x+h)-g(x)} \cdot \cfrac{g(x+h)-g(x)}{(x+h)-x}\\)
+
+\\(\text{since the limit of a product is the product of limits,}\\)
+
+\\(f\prime(x) = \lim\limits_{h \to 0} \cfrac{u(g(x+h))-u(g(x))}{g(x+h)-g(x)} \cdot \lim\limits_{h \to 0} \cfrac{g(x+h)-g(x)}{(x+h)-x}\\)
+
+\\(\text{back to first principles,}\\)
+
+\\(\boxed{f\prime(x) = u\prime(g(x)) \cdot g\prime(x) = \frac{du}{dg} \cdot \frac{dg}{dx}}\\)
+
+
+[comment]: Example - f(x) = (4x^2 + 1)^2
+<br/><br/>
+\\(\underline{\bold{Example:}\space f(x) = (4x^2 + 1)^2}\\)
+
+\\(\text{let } f(x)=u(g(x))=(g(x))^2 \space \text{, and } g(x) = 4x^2+1\\)
+
+\\(\text{diffrentiate using first principles,}\\)
+
+\\(u\prime(g(x)) = \frac{du}{dg} = 2 \cdot g(x) = 2 \cdot (4x^2 + 1) = 8x^2 + 2\\)
+
+\\(g\prime(x) = \frac{dg}{dx} = 8x\\)
+
+\\(\text{apply chain rule,}\\)
+
+\\(f\prime(x) = u\prime(g(x)) \cdot g\prime(x) = \frac{du}{dg} \cdot \frac{dg}{dx} = (8x^2 + 2) \cdot 8x\\)
+
+\\(\boxed{f\prime(x) = 64x^3 + 16x}\\)

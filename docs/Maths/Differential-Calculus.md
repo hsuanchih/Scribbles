@@ -17,12 +17,9 @@ parent: Maths
 \\(gradient_{m_{tangent}} = \lim\limits_{h \to 0} \cfrac{f(x+h) - f(x)}{h} = f\prime(x)\\)
 
 ---
-
-### Applying the First Principles of Calculus
----
-
-[comment]: Example - f(x) = x^2
-\\(\underline{\bold{Example:}\space f(x) = x^2}\\)
+### Applying the First Principles of Calculus:
+<br/>
+\\(f(x) = x^2 \space \text{, find } f\prime(x)\\)
 
 \\(f\prime(x) = \lim\limits_{h \to 0} \cfrac{(x+h)^2 - x^2}{h}\\)
 
@@ -39,12 +36,10 @@ parent: Maths
 \\(\boxed{(f\prime(x) = 2x}\\)
 
 
-
-[comment]: Example - f(x) = x^3
 <br/><br/>
-\\(\underline{\bold{Example:}\space f(x) = x^3}\\)
+\\(f(x) = x^3 \space \text{, find } f\prime(x)\\)
 
-\\(f\prime(x) = \lim\limits_{h \to 0} \cfrac{(x+h)^2 - x^2}{h}\\)
+\\(f\prime(x) = \lim\limits_{h \to 0} \cfrac{(x+h)^3 - x^3}{h}\\)
 
 \\(\text{by expansion,}\\)
 
@@ -59,17 +54,13 @@ parent: Maths
 \\(\boxed{f\prime(x) = 3x^2}\\)
 
 ---
-## Derivatives of Compound Functions
+## Derivative of Sums Rule
 ---
-### Derivative of Sums Rule
-<br/>
 \\(\text{if }\boxed{f(x) = u(x) + v(x)},\text{ then }\boxed{f\prime(x) = u\prime(x) + v\prime(x)}\\)
 
 ---
-
-[comment]: Proof - Derivative of Sums
-\\(\underline{\bold{Proof:}}\\)
-
+### Proof:
+<br/>
 \\(\text{Using first principles:}\\)
 
 \\(f\prime(x) = \lim\limits_{h \to 0} \cfrac{f(x+h) - f(x)}{h}\\)
@@ -90,10 +81,10 @@ parent: Maths
 
 \\(\boxed{f\prime(x) = u\prime(x) + v\prime(x)}\\)
 
-
-[comment]: Example - f(x) = (4x^2 + 1)^2
-<br/><br/>
-\\(\underline{\bold{Example:}\space f(x) = (4x^2 + 1)^2}\\)
+---
+### Example:
+<br/>
+\\(f(x) = (4x^2+1)^2 \space \text{, find } f\prime(x)\\)
 
 \\(f(x) = (4x^2 + 1)^2 = 16x^4 + 8x^2 + 1\\)
 
@@ -108,15 +99,13 @@ parent: Maths
 \\(\boxed{f\prime(x) = 64x^3 + 16x}\\)
 
 ---
-### Chain (Function of a Function) Rule
-<br/>
+## Chain (Function of a Function) Rule
+---
 \\(\text{if }\boxed{f(x) = u(g(x))},\text{ then }\boxed{f\prime(x) = u\prime(g(x)) \cdot g\prime(x) = \frac{du}{dg} \cdot \frac{dg}{dx}}\\)
 
 ---
-
-[comment]: Proof - Chain Rule
-\\(\underline{\bold{Proof:}}\\)
-
+### Proof:
+<br/>
 \\(\text{Using first principles:}\\)
 
 \\(f\prime(x) = \lim\limits_{h \to 0} \cfrac{f(x+h) - f(x)}{h}\\)
@@ -145,10 +134,10 @@ parent: Maths
 
 \\(\boxed{f\prime(x) = u\prime(g(x)) \cdot g\prime(x) = \frac{du}{dg} \cdot \frac{dg}{dx}}\\)
 
-
-[comment]: Example - f(x) = (4x^2 + 1)^2
-<br/><br/>
-\\(\underline{\bold{Example:}\space f(x) = (4x^2 + 1)^2}\\)
+---
+### Example:
+<br/>
+\\(f(x) = (4x^2+1)^2 \space \text{, find } f\prime(x)\\)
 
 \\(\text{let } f(x)=u(g(x))=(g(x))^2 \space \text{, and } g(x) = 4x^2+1\\)
 

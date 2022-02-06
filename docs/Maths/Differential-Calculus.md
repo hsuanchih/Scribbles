@@ -152,3 +152,56 @@ parent: Maths
 \\(f\prime(x) = u\prime(g(x)) \cdot g\prime(x) = \frac{du}{dg} \cdot \frac{dg}{dx} = (8x^2 + 2) \cdot 8x\\)
 
 \\(\boxed{f\prime(x) = 64x^3 + 16x}\\)
+
+---
+## Product Rule
+---
+\\(\text{if }\boxed{f(x) = u(x) \cdot g(x)},\text{ then }\boxed{f\prime(x) = u\prime(x) \cdot g(x) + g\prime(x) \cdot u(x)}\\)
+
+---
+### Proof:
+<br/>
+\\(\text{Using first principles:}\\)
+
+\\(f\prime(x) = \lim\limits_{h \to 0} \cfrac{f(x+h) - f(x)}{h}\\)
+
+\\(\text{by substitution,}\\)
+
+\\(f\prime(x) = \lim\limits_{h \to 0} \cfrac{u(x+h) \cdot g(x+h) - u(x) \cdot g(x)}{h}\\)
+
+\\(\text{add } \space u(x+h) \cdot g(x) - u(x+h) \cdot g(x) \space \text{to the numerator to faciliate factorization}\\)
+
+\\(f\prime(x) = \lim\limits_{h \to 0} \cfrac{u(x+h) \cdot g(x+h) - u(x) \cdot g(x) + (u(x+h) \cdot g(x) - u(x+h) \cdot g(x))}{h}\\)
+
+\\(\text{re-arrangement the numerator,}\\)
+
+\\(f\prime(x) = \lim\limits_{h \to 0} \cfrac{ (u(x+h) \cdot g(x+h) - u(x+h) \cdot g(x)) + (u(x+h) \cdot g(x) - u(x) \cdot g(x))}{h}\\)
+
+\\(\text{factor}\space u(x+h) \space \text{\&} \space g(x) \space \text{from the equation,}\\)
+
+\\(f\prime(x) = \lim\limits_{h \to 0} u(x+h) \cdot \cfrac{g(x+h))-g(x)}{h} + g(x) \cdot \cfrac{u(x+h)-u(x)}{h}\\)
+
+\\(\text{the limit of a sum is the sum of limits,}\\)
+
+\\(f\prime(x) = \lim\limits_{h \to 0} u(x+h) \cdot \cfrac{g(x+h))-g(x)}{h} + \lim\limits_{h \to 0} g(x) \cdot \cfrac{u(x+h)-u(x)}{h}\\)
+
+\\(\text{back to first principles,}\\)
+
+\\(\boxed{f\prime(x) = u(x) \cdot g\prime(x) + g(x) \cdot u\prime(x) = u\prime(x) \cdot g(x) + g\prime(x) \cdot u(x)}\\)
+
+---
+### Example:
+<br/>
+\\(f(x) = (4x^2+1)^2 \space \text{, find } f\prime(x)\\)
+
+\\(\text{let } f(x)=u(x) \cdot g(x) \space \text{, and } u(x) = g(x) = 4x^2+1\\)
+
+\\(\text{diffrentiate using first principles,}\\)
+
+\\(u\prime(x) = g\prime(x) = 8x\\)
+
+\\(\text{apply product rule,}\\)
+
+\\(f\prime(x) = u\prime(x) \cdot g(x) + g\prime(x) \cdot u(x) = 8x \cdot (4x^2+1) + 8x \cdot (4x^2+1)\\)
+
+\\(\boxed{f\prime(x) = 64x^3 + 16x}\\)

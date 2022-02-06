@@ -205,3 +205,46 @@ parent: Maths
 \\(f\prime(x) = u\prime(x) \cdot g(x) + g\prime(x) \cdot u(x) = 8x \cdot (4x^2+1) + 8x \cdot (4x^2+1)\\)
 
 \\(\boxed{f\prime(x) = 64x^3 + 16x}\\)
+
+---
+## Quotient Rule
+---
+\\(\text{if }\boxed{f(x) = \frac{u(x)}{g(x)}},\text{ then }\boxed{f\prime(x) = \frac{u\prime(x) \cdot g(x) - g\prime(x) \cdot u(x)}{g(x)^2}}\\)
+
+---
+### Proof:
+<br/>
+\\(\text{let } \space h(x) = g(x)^{-1},\\)
+
+\\(\text{then according to chain rule,} \space h\prime(x) = -g(x)^{-2} \cdot g\prime(x)\\)
+
+\\(f(x) = \frac{u(x)}{g(x)} = u(x) \cdot h(x)\\)
+
+\\(\text{then according to product rule,}\\)
+
+\\(f\prime(x) = u\prime(x) \cdot h(x) + h\prime(x) \cdot u(x)\\)
+
+\\(f\prime(x) = u\prime(x) \cdot g(x)^{-1} - g(x)^{-2} \cdot g\prime(x) \cdot u(x)\\)
+
+\\(\boxed{f\prime(x) = \frac{u\prime(x)}{g(x)} - \frac{u(x)}{g(x)^2} = \frac{u\prime(x) \cdot g(x) - g\prime(x) \cdot u(x)}{g(x)^2}}\\)
+
+---
+### Example:
+<br/>
+\\(f(x) = (4x^2+1)^2 \space \text{, find } f\prime(x)\\)
+
+\\(\text{let } f(x)=\frac{u(x)}{g(x)} \space \text{, where } u(x) = (4x^2+1)^3, \space g(x) = 4x^2+1\\)
+
+\\(\text{then,}\\)
+
+\\(u\prime(x) = 3 \cdot (4x^2+1)^2 \cdot 8x\\)
+
+\\(g\prime(x) = 8x\\)
+
+\\(\text{apply quotient rule,}\\)
+
+\\(f\prime(x) = \frac{u\prime(x) \cdot g(x) - g\prime(x) \cdot u(x)}{g(x)^2} = \frac{3 \cdot (4x^2+1)^2 \cdot 8x \cdot (4x^2+1) - 8x \cdot (4x^2+1)^3}{(4x^2+1)^2}\\)
+
+\\(f\prime(x) = 3 \cdot 8x \cdot (4x^2+1) - 8x \cdot (4x^2+1) = 2 \cdot 8x \cdot (4x^2+1)\\)
+
+\\(\boxed{f\prime(x) = 64x^3 + 16x}\\)

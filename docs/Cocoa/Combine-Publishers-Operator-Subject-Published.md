@@ -6,7 +6,7 @@ parent: Cocoa
 
 # Combine Publishers - Operator, Subject & @Published
 
-Here we're building on [Combine - Publisher, Subscriber & Subscription](Cocoa/Combine-Publisher-Subscriber-Subscription.md) to solidify our understanding of Combine by looking at some practical examples of publishers. Specifically, we'll explore implementations of an operator, a subject, and the \@Published property wrapper.
+Here we're building on [Combine - Publisher, Subscriber & Subscription](Combine-Publisher-Subscriber-Subscription.md) to solidify our understanding of Combine by looking at some practical examples of publishers. Specifically, we'll explore implementations of an operator, a subject, and the \@Published property wrapper.
 
 ---
 ## Operator

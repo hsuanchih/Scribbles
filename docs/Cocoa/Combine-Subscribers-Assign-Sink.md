@@ -6,7 +6,7 @@ parent: Cocoa
 
 # Combine Subscribers - Assign & Sink
 
-We learned the basics of subscribers in [Combine - Publisher, Subscriber & Subscription](iOS-OSX/Combine-Publisher-Subscriber-Subscription.md) and implemented our own. Here we're extending our discussion on subscribers by looking at two concrete subscriber types that come with Combine:
+We learned the basics of subscribers in [Combine - Publisher, Subscriber & Subscription](Combine-Publisher-Subscriber-Subscription.md) and implemented our own. Here we're extending our discussion on subscribers by looking at two concrete subscriber types that come with Combine:
 * `Subscribers.Assign`
 * `Subscribers.Sink`
 

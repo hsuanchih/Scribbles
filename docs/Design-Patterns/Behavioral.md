@@ -451,75 +451,88 @@ for _ in 1...10 {
 
 __Observer__ allows for an observer to observe changes on an observable subject.
 
-__Example__
+__The Setup__
+
+![1000px-Observer_w_update svg](https://user-images.githubusercontent.com/5953587/230592443-4a02c57e-700d-4971-8865-795d56916f8d.png)
+
+__The Observer Prototype__
 ```swift
-// The Obervable property wrapper allows observers to create bindings
-// with its changes through a callback
-@propertyWrapper
-class Observable<Value> {
-    public typealias ValueChangeHandler = (Value)->Void
-    private var valueChangeHandlers : [ValueChangeHandler] = []
-    public init(wrappedValue: Value) {
-        self.wrappedValue = wrappedValue
+// The Observer Prototype
+// An observer subscribes to value updates
+protocol Observer {
+    associatedtype ValueToObserve
+    func update(_ value: ValueToObserve)
+}
+```
+__A Concrete Observer__
+```swift
+// A type-erased concrete observer
+final class AnyObserver<Value>: Observer {
+    typealias ValueToObserve = Value
+    private let id: Int
+
+    init(id: Int) {
+        self.id = id
     }
-    var wrappedValue : Value {
-        didSet { valueChangeHandlers.forEach { $0(wrappedValue) } }
-    }
-    var projectedValue : Observable<Value> { self }
-    
-    func bind(_ valueChangeHandler: @escaping ValueChangeHandler) {
-        valueChangeHandlers.append(valueChangeHandler)
+
+    func update(_ value: Value) {
+        print("Observer \(id) - did receive update: \(value)")
     }
 }
+```
+__The Observable Prototype__
+```swift
+// The Observable Prototype
+// An observable allows observers to subscribe to & unsubscribe from it via the register/deregister methods,
+// and keeps track of its registered observers in order to notify its observers of value updates
+protocol Observable: AnyObject {
+    associatedtype ValueToPublish
+    var value: ValueToPublish { get }
+    var observers: [AnyObserver<ValueToPublish>] { get set }
+    func registerObserver(_ observer: AnyObserver<ValueToPublish>)
+    func deregisterObserver(_ observer: AnyObserver<ValueToPublish>)
+    func notifyObservers()
+}
 
-// The observed subject holds the observable value that might be of interest
-// to the observer
-final class ObservedSubject<Value> {
-    @Observable var value : Value
-    public init(_ value: Value) {
+extension Observable {
+    func registerObserver(_ observer: AnyObserver<ValueToPublish>) {
+        observers.append(observer)
+    }
+
+    func deregisterObserver(_ observer: AnyObserver<ValueToPublish>) {
+        observers.removeAll { $0 === observer }
+    }
+
+    func notifyObservers() {
+        observers.forEach { $0.update(value) }
+    }
+}
+```
+__A Concrete Observable__
+```swift
+// A type-erased concrete observable
+final class AnyObservable<Value>: Observable {
+    typealias ValueToPublish = Value
+
+    private(set) var value: Value {
+        didSet {
+            notifyObservers()
+        }
+    }
+
+    var observers: [AnyObserver<Value>]
+    
+    init(value: Value) {
+        observers = []
         self.value = value
     }
-    public func bind(_ valueChangeHandler: @escaping (Value)->Void) {
-        $value.bind(valueChangeHandler)
+    
+    func on(next value: Value) {
+        self.value = value
     }
 }
-
-// An observer prototype
-struct Observer<Value> {
-    let id : Int
-    func handler(_ value: Value) {
-        print("Observer \(id): \(value)")
-    }
-}
-
-// Use Case:
-// Create an observed subject
-let observedSubject = ObservedSubject(0)
-
-// And bind 10 arbitrary observers to the subject
-for observerId in 1...10 {
-    observedSubject.bind(Observer<Int>(id: observerId).handler)
-}
-
-// Update the observable with values from 1 to 10
-for i in 1...10 {
-    observedSubject.value = i
-}
-
-// Console Output:
-// Observer 1: 1
-// Observer 2: 1
-// Observer 3: 1
-// Observer 4: 1
-// .
-// .
-// .
-// Observer 7: 10
-// Observer 8: 10
-// Observer 9: 10
-// Observer 10: 10
 ```
----
+
 ## State
 
 __State__ behaves much like a state machine in that an object's behavior changes depending on its internal state.

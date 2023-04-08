@@ -26,6 +26,7 @@ Scribbles now has its own GitHub Pages site at: https://hsuanchih.github.io/Scri
 
 ---
 ## RxSwift
+* [RxSwift Prototypes](docs/RxSwift/RxSwift-Prototypes.md)
 
 ---
 ## Playground

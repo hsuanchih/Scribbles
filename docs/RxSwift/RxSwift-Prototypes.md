@@ -1,6 +1,6 @@
 ---
 layout: default
-title: RxSwift-Prototypes
+title: RxSwift Prototypes
 parent: RxSwift
 ---
 

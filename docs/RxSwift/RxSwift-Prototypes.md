@@ -180,12 +180,185 @@ private final class SinkDisposer: Cancelable {
     }
 }
 ```
+### Sink\<Observer\>
+In the logical sense, a `Sink` serves as a bridge between the `Observable` and the `Observer`.
+
+In practice, a `Sink` is used by `RxSwift` to store the logic used to designate the `Producer`, and maintains references to:
+* Its observer, and
+* A `SinkDisposer`
+```swift
+class Sink<Observer: ObserverType>: Disposable {
+    fileprivate let observer: Observer
+    fileprivate let cancel: Cancelable
+    private let disposed = AtomicInt(0)
+
+    #if DEBUG
+        private let synchronizationTracker = SynchronizationTracker()
+    #endif
+
+    init(observer: Observer, cancel: Cancelable) {
+#if TRACE_RESOURCES
+        _ = Resources.incrementTotal()
+#endif
+        self.observer = observer
+        self.cancel = cancel
+    }
+
+    final func forwardOn(_ event: Event<Observer.Element>) {
+        #if DEBUG
+            self.synchronizationTracker.register(synchronizationErrorMessage: .default)
+            defer { self.synchronizationTracker.unregister() }
+        #endif
+        if isFlagSet(self.disposed, 1) {
+            return
+        }
+        self.observer.on(event)
+    }
+
+    final func forwarder() -> SinkForward<Observer> {
+        SinkForward(forward: self)
+    }
+
+    final var isDisposed: Bool {
+        isFlagSet(self.disposed, 1)
+    }
+
+    func dispose() {
+        fetchOr(self.disposed, 1)
+        self.cancel.dispose()
+    }
+
+    deinit {
+#if TRACE_RESOURCES
+       _ =  Resources.decrementTotal()
+#endif
+    }
+}
+
+final class SinkForward<Observer: ObserverType>: ObserverType {
+    typealias Element = Observer.Element 
+
+    private let forward: Sink<Observer>
+
+    init(forward: Sink<Observer>) {
+        self.forward = forward
+    }
+
+    final func on(_ event: Event<Element>) {
+        switch event {
+        case .next:
+            self.forward.observer.on(event)
+        case .error, .completed:
+            self.forward.observer.on(event)
+            self.forward.cancel.dispose()
+        }
+    }
+}
+```
 
 ---
-## Item 2
+## Observers
+### ObserverType
+Types can conform to this protocol to indicate that it is an `Observer`.
+```swift
+/// Supports push-style iteration over an observable sequence.
+public protocol ObserverType {
+    /// The type of elements in sequence that observer can observe.
+    associatedtype Element
 
----
-## Item 3
+    /// Notify observer about sequence event.
+    ///
+    /// - parameter event: Event that occurred.
+    func on(_ event: Event<Element>)
+}
+
+/// Convenience API extensions to provide alternate next, error, completed events
+extension ObserverType {
+    
+    /// Convenience method equivalent to `on(.next(element: Element))`
+    ///
+    /// - parameter element: Next element to send to observer(s)
+    public func onNext(_ element: Element) {
+        self.on(.next(element))
+    }
+    
+    /// Convenience method equivalent to `on(.completed)`
+    public func onCompleted() {
+        self.on(.completed)
+    }
+    
+    /// Convenience method equivalent to `on(.error(Swift.Error))`
+    /// - parameter error: Swift.Error to send to observer(s)
+    public func onError(_ error: Swift.Error) {
+        self.on(.error(error))
+    }
+}
+```
+### AnyObserver\<Element\>
+A concrete `Observer` type that type-erases the generic type declared in the `ObserverType` protocol.
+```swift
+/// A type-erased `ObserverType`.
+///
+/// Forwards operations to an arbitrary underlying observer with the same `Element` type, hiding the specifics of the underlying observer type.
+public struct AnyObserver<Element> : ObserverType {
+    /// Anonymous event handler type.
+    public typealias EventHandler = (Event<Element>) -> Void
+
+    private let observer: EventHandler
+
+    /// Construct an instance whose `on(event)` calls `eventHandler(event)`
+    ///
+    /// - parameter eventHandler: Event handler that observes sequences events.
+    public init(eventHandler: @escaping EventHandler) {
+        self.observer = eventHandler
+    }
+    
+    /// Construct an instance whose `on(event)` calls `observer.on(event)`
+    ///
+    /// - parameter observer: Observer that receives sequence events.
+    public init<Observer: ObserverType>(_ observer: Observer) where Observer.Element == Element {
+        self.observer = observer.on
+    }
+    
+    /// Send `event` to this observer.
+    ///
+    /// - parameter event: Event instance.
+    public func on(_ event: Event<Element>) {
+        self.observer(event)
+    }
+
+    /// Erases type of observer and returns canonical observer.
+    ///
+    /// - returns: type erased observer.
+    public func asObserver() -> AnyObserver<Element> {
+        self
+    }
+}
+
+extension AnyObserver {
+    /// Collection of `AnyObserver`s
+    typealias s = Bag<(Event<Element>) -> Void>
+}
+
+extension ObserverType {
+    /// Erases type of observer and returns canonical observer.
+    ///
+    /// - returns: type erased observer.
+    public func asObserver() -> AnyObserver<Element> {
+        AnyObserver(self)
+    }
+
+    /// Transforms observer of type R to type E using custom transform method.
+    /// Each event sent to result observer is transformed and sent to `self`.
+    ///
+    /// - returns: observer that transforms events.
+    public func mapObserver<Result>(_ transform: @escaping (Result) throws -> Element) -> AnyObserver<Result> {
+        AnyObserver { e in
+            self.on(e.map(transform))
+        }
+    }
+}
+```
 
 ---
 ## Item 4

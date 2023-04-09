@@ -255,6 +255,16 @@ final class SinkForward<Observer: ObserverType>: ObserverType {
     }
 }
 ```
+### Type Diagram of Observables
+An observable in `RxSwift` is either:
+* A concrete type that conforms to the `ObservableType` protocol, or
+* A subclass of `Observable<Element>`, or
+* A subclass of `Producer<Element>`
+
+Operators are `Observable`s types that provide their own distinct `Sink` implementations.
+
+![type-diagram-rxswift](https://user-images.githubusercontent.com/5953587/230755362-b76b940b-6040-499e-a5d1-ba09d5471e2f.jpg)
+Image from [8 Mistakes to Avoid while Using RxSwift — Part 1](https://medium.com/@polidea/8-mistakes-to-avoid-while-using-rxswift-part-1-e45b21b47649)
 
 ---
 ## Observers

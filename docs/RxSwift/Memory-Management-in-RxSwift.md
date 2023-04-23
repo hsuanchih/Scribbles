@@ -7,6 +7,40 @@ parent: RxSwift
 # Memory Management in RxSwift
 ---
 
+### AnonymousObservable\<Element\>
+```swift
+extension ObservableType {
+    public static func create(_ subscribe: @escaping (AnyObserver<Element>) -> Disposable) -> Observable<Element> {
+        AnonymousObservable(subscribe)
+    }
+}
+
+final private class AnonymousObservable<Element>: Producer<Element> {
+    typealias SubscribeHandler = (AnyObserver<Element>) -> Disposable
+
+    let subscribeHandler: SubscribeHandler
+
+    init(_ subscribeHandler: @escaping SubscribeHandler) {
+        self.subscribeHandler = subscribeHandler
+    }
+
+    override func run<Observer: ObserverType>(_ observer: Observer, cancel: Cancelable) -> (sink: Disposable, subscription: Disposable) where Observer.Element == Element {
+        // An AnonymousObservableSink is created with references to:
+        // * The Observer
+        // * The SinkDisposer
+        let sink = AnonymousObservableSink(observer: observer, cancel: cancel)
+        
+        let subscription = sink.run(self)
+        
+        // Return:
+        // * AnonymousObservableSink as the sink
+        // * The disposable created & returned from the Observable.create closure as the subscription 
+        return (sink: sink, subscription: subscription)
+    }
+}
+```
+
+
 ## Visual Depiction
 ### Bird's Eye View
 

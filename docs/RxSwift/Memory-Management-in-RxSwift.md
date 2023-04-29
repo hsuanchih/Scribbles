@@ -189,7 +189,7 @@ final private class AnonymousObservableSink<Observer: ObserverType>: Sink<Observ
 ```
 
 ### SinkDisposer
-A type responsible for disposing of both the sink & the subscription
+A type responsible for disposing of both the sink & the subscription.
 ```swift
 private final class SinkDisposer: Cancelable {
     private enum DisposeState: Int32 {

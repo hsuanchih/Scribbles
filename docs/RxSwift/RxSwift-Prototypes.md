@@ -58,8 +58,6 @@ extension ObservableType {
     
     /// Default implementation of converting `ObservableType` to `Observable`.
     public func asObservable() -> Observable<Element> {
-        // temporary workaround
-        //return Observable.create(subscribe: self.subscribe)
         Observable.create { o in self.subscribe(o) }
     }
 }
@@ -69,26 +67,13 @@ extension ObservableType {
 A concrete (however, __abstract__) `Observable` type that type-erases the generic type declared in the `ObservableType` protocol.
 ```swift
 /// A type-erased `ObservableType`. 
-///
-/// It represents a push style sequence.
 public class Observable<Element> : ObservableType {
-    init() {
-#if TRACE_RESOURCES
-        _ = Resources.incrementTotal()
-#endif
-    }
-    
     public func subscribe<Observer: ObserverType>(_ observer: Observer) -> Disposable where Observer.Element == Element {
+        // Throw a fatal error
         rxAbstractMethod()
     }
     
     public func asObservable() -> Observable<Element> { self }
-    
-    deinit {
-#if TRACE_RESOURCES
-        _ = Resources.decrementTotal()
-#endif
-    }
 }
 ```
 
@@ -121,140 +106,12 @@ class Producer<Element>: Observable<Element> {
     }
 
     func run<Observer: ObserverType>(_ observer: Observer, cancel: Cancelable) -> (sink: Disposable, subscription: Disposable) where Observer.Element == Element {
+        // Throw a fatal error
         rxAbstractMethod()
     }
 }
-
-private final class SinkDisposer: Cancelable {
-    private enum DisposeState: Int32 {
-        case disposed = 1
-        case sinkAndSubscriptionSet = 2
-    }
-
-    private let state = AtomicInt(0)
-    private var sink: Disposable?
-    private var subscription: Disposable?
-
-    var isDisposed: Bool {
-        isFlagSet(self.state, DisposeState.disposed.rawValue)
-    }
-
-    func setSinkAndSubscription(sink: Disposable, subscription: Disposable) {
-        self.sink = sink
-        self.subscription = subscription
-
-        let previousState = fetchOr(self.state, DisposeState.sinkAndSubscriptionSet.rawValue)
-        if (previousState & DisposeState.sinkAndSubscriptionSet.rawValue) != 0 {
-            rxFatalError("Sink and subscription were already set")
-        }
-
-        if (previousState & DisposeState.disposed.rawValue) != 0 {
-            sink.dispose()
-            subscription.dispose()
-            self.sink = nil
-            self.subscription = nil
-        }
-    }
-
-    func dispose() {
-        let previousState = fetchOr(self.state, DisposeState.disposed.rawValue)
-
-        if (previousState & DisposeState.disposed.rawValue) != 0 {
-            return
-        }
-
-        if (previousState & DisposeState.sinkAndSubscriptionSet.rawValue) != 0 {
-            guard let sink = self.sink else {
-                rxFatalError("Sink not set")
-            }
-            guard let subscription = self.subscription else {
-                rxFatalError("Subscription not set")
-            }
-
-            sink.dispose()
-            subscription.dispose()
-
-            self.sink = nil
-            self.subscription = nil
-        }
-    }
-}
 ```
-### Sink\<Observer\>
-In the logical sense, a `Sink` serves as a bridge between the `Observable` and the `Observer`.
 
-In practice, a `Sink` is used by `RxSwift` to store the logic used to designate the `Producer`, and maintains references to:
-* Its observer, and
-* A `SinkDisposer`
-```swift
-class Sink<Observer: ObserverType>: Disposable {
-    fileprivate let observer: Observer
-    fileprivate let cancel: Cancelable
-    private let disposed = AtomicInt(0)
-
-    #if DEBUG
-        private let synchronizationTracker = SynchronizationTracker()
-    #endif
-
-    init(observer: Observer, cancel: Cancelable) {
-#if TRACE_RESOURCES
-        _ = Resources.incrementTotal()
-#endif
-        self.observer = observer
-        self.cancel = cancel
-    }
-
-    final func forwardOn(_ event: Event<Observer.Element>) {
-        #if DEBUG
-            self.synchronizationTracker.register(synchronizationErrorMessage: .default)
-            defer { self.synchronizationTracker.unregister() }
-        #endif
-        if isFlagSet(self.disposed, 1) {
-            return
-        }
-        self.observer.on(event)
-    }
-
-    final func forwarder() -> SinkForward<Observer> {
-        SinkForward(forward: self)
-    }
-
-    final var isDisposed: Bool {
-        isFlagSet(self.disposed, 1)
-    }
-
-    func dispose() {
-        fetchOr(self.disposed, 1)
-        self.cancel.dispose()
-    }
-
-    deinit {
-#if TRACE_RESOURCES
-       _ =  Resources.decrementTotal()
-#endif
-    }
-}
-
-final class SinkForward<Observer: ObserverType>: ObserverType {
-    typealias Element = Observer.Element 
-
-    private let forward: Sink<Observer>
-
-    init(forward: Sink<Observer>) {
-        self.forward = forward
-    }
-
-    final func on(_ event: Event<Element>) {
-        switch event {
-        case .next:
-            self.forward.observer.on(event)
-        case .error, .completed:
-            self.forward.observer.on(event)
-            self.forward.cancel.dispose()
-        }
-    }
-}
-```
 ### Type Diagram of Observables
 An observable in `RxSwift` is either:
 * A concrete type that conforms to the `ObservableType` protocol, or
@@ -271,7 +128,6 @@ Image from [8 Mistakes to Avoid while Using RxSwift — Part 1](https://medium.c
 ### ObserverType
 Types can conform to this protocol to indicate that it is an `Observer`.
 ```swift
-/// Supports push-style iteration over an observable sequence.
 public protocol ObserverType {
     /// The type of elements in sequence that observer can observe.
     associatedtype Element
@@ -304,6 +160,7 @@ extension ObserverType {
     }
 }
 ```
+
 ### AnyObserver\<Element\>
 A concrete `Observer` type that type-erases the generic type declared in the `ObserverType` protocol.
 ```swift
@@ -342,30 +199,6 @@ public struct AnyObserver<Element> : ObserverType {
     /// - returns: type erased observer.
     public func asObserver() -> AnyObserver<Element> {
         self
-    }
-}
-
-extension AnyObserver {
-    /// Collection of `AnyObserver`s
-    typealias s = Bag<(Event<Element>) -> Void>
-}
-
-extension ObserverType {
-    /// Erases type of observer and returns canonical observer.
-    ///
-    /// - returns: type erased observer.
-    public func asObserver() -> AnyObserver<Element> {
-        AnyObserver(self)
-    }
-
-    /// Transforms observer of type R to type E using custom transform method.
-    /// Each event sent to result observer is transformed and sent to `self`.
-    ///
-    /// - returns: observer that transforms events.
-    public func mapObserver<Result>(_ transform: @escaping (Result) throws -> Element) -> AnyObserver<Result> {
-        AnyObserver { e in
-            self.on(e.map(transform))
-        }
     }
 }
 ```
@@ -436,6 +269,11 @@ public final class DisposeBag: DisposeBase {
     
     private func _insert(_ disposable: Disposable) -> Disposable? {
         self.lock.performLocked {
+            // Add the disposable to the existing collection of disposables maintained
+            // by this dispose bag.
+            // However, if the dispose bag has been disposed of, also dispose of the
+            // disposable that's been added to the dispose bag.
+    
             if self.isDisposed {
                 return disposable
             }
@@ -448,6 +286,8 @@ public final class DisposeBag: DisposeBase {
 
     /// This is internal on purpose, take a look at `CompositeDisposable` instead.
     private func dispose() {
+        // Call dispose on all the disposables removed from the dispose bag's collection
+        // of disposables.
         let oldDisposables = self._dispose()
 
         for disposable in oldDisposables {
@@ -457,6 +297,10 @@ public final class DisposeBag: DisposeBase {
 
     private func _dispose() -> [Disposable] {
         self.lock.performLocked {
+            // * Remove all disposables from the existing collection of disposables kept by
+            //   this dispose bag
+            // * Mark the dispose bag as disposed
+            // * Return the disposables that have been removed from the disposables collection
             let disposables = self.disposables
             
             self.disposables.removeAll(keepingCapacity: false)

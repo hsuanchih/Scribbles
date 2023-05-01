@@ -460,23 +460,25 @@ __The Observer Prototype__
 // The Observer Prototype
 // An observer subscribes to value updates
 protocol Observer {
+
+    // The type of value the observer wants to observe
     associatedtype ValueToObserve
+    
+    // Call this function on the observer to notify it of a value update
     func update(_ value: ValueToObserve)
 }
 ```
 __A Concrete Observer__
 ```swift
 // A type-erased concrete observer
-final class AnyObserver<Value>: Observer {
-    typealias ValueToObserve = Value
-    private let id: Int
+class AnyObserver<Value>: Observer {
 
-    init(id: Int) {
-        self.id = id
-    }
+    // Bind the value type of the concrete observer to the associate type defined in the protocol
+    typealias ValueToObserve = Value
 
     func update(_ value: Value) {
-        print("Observer \(id) - did receive update: \(value)")
+        // Print a message to the console when an observer receives a value update
+        print("Did receive update: \(value)")
     }
 }
 ```
@@ -486,11 +488,23 @@ __The Observable Prototype__
 // An observable allows observers to subscribe to & unsubscribe from it via the register/deregister methods,
 // and keeps track of its registered observers in order to notify its observers of value updates
 protocol Observable: AnyObject {
+
+    // The type of value the observable wishes to publishe
     associatedtype ValueToPublish
+    
+    // Stores the current value of the observable
     var value: ValueToPublish { get }
+    
+    // Keeps a collection of observers interested in the observable
     var observers: [AnyObserver<ValueToPublish>] { get set }
+    
+    // Call this function on the observable to add an observer
     func registerObserver(_ observer: AnyObserver<ValueToPublish>)
+    
+    // Call this function on the observable to remove an observer
     func deregisterObserver(_ observer: AnyObserver<ValueToPublish>)
+    
+    // The observable calls this function to notify its observers of value change
     func notifyObservers()
 }
 
@@ -511,7 +525,7 @@ extension Observable {
 __A Concrete Observable__
 ```swift
 // A type-erased concrete observable
-final class AnyObservable<Value>: Observable {
+class AnyObservable<Value>: Observable {
     typealias ValueToPublish = Value
 
     private(set) var value: Value {
@@ -527,10 +541,78 @@ final class AnyObservable<Value>: Observable {
         self.value = value
     }
     
+    // Update the state/value of the observable
     func on(next value: Value) {
         self.value = value
     }
 }
+```
+__Putting Things into Action__
+```swift
+typealias Temperature = Int
+typealias Precipitation = Double
+
+// The weather center is a data center that notifies observers of 
+// temperature & precipitation updates
+final class WeatherCenter {
+    public private(set) var temperature: AnyObservable<Temperature> = AnyObservable(value: 15)
+    public private(set) var precipitation: AnyObservable<Precipitation> = AnyObservable(value: 0.67)
+}
+
+// The human body start sweating when the temperature reaches 30 degrees
+final class HumanBody: AnyObserver<Temperature> {
+    override func update(_ value: Temperature) {
+        print("The human body is \(value >= 30 ? "sweating" : "not sweating")")
+    }
+}
+
+// A smart air conditioner turns on automatically when the temperature reaches 29 degrees
+final class AirConditioner: AnyObserver<Temperature> {
+    override func update(_ value: Temperature) {
+        print("The air conditioner is \(value >= 29 ? "on" : "off")")
+    }
+}
+
+// A smart umbrella opens automatically when the precipitation rises above 1 centimeter
+final class Umbrella: AnyObserver<Precipitation> {
+    override func update(_ value: Precipitation) {
+        print("The umbrella is \(value >= 1 ? "open" : "closed")")
+    }
+}
+
+let weatherCenter = WeatherCenter()
+
+let humanBody = HumanBody()
+let airConditioner = AirConditioner()
+let umbrella = Umbrella()
+
+weatherCenter.temperature.registerObserver(humanBody)
+weatherCenter.temperature.registerObserver(airConditioner)
+
+(28 ... 30).forEach(weatherCenter.temperature.on(next:))
+// Output:
+// The human body is not sweating
+// The air conditioner is off
+// The human body is not sweating
+// The air conditioner is on
+// The human body is sweating
+// The air conditioner is on
+
+weatherCenter.temperature.deregisterObserver(airConditioner)
+
+weatherCenter.temperature.on(next: 27)
+// Output:
+// The human body is not sweating
+
+weatherCenter.precipitation.registerObserver(umbrella)
+
+weatherCenter.precipitation.on(next: 0.99)
+// Output:
+// The umbrella is closed
+
+weatherCenter.precipitation.on(next: 1)
+// Output:
+// The umbrella is open
 ```
 
 ## State

@@ -31,7 +31,7 @@ Scribbles now has its own GitHub Pages site at: https://hsuanchih.github.io/Scri
 * [CurrentThreadScheduler](docs/RxSwift/CurrentThreadScheduler.md)
 
 ---
-## Swift Structured Concurrency
+## Swift Concurrency
 
 ---
 ## Playground

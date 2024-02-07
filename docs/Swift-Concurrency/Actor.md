@@ -1,7 +1,7 @@
 ---
 layout: default
 title: Actor
-parent: Structured Concurrency
+parent: Swift Concurrency
 ---
 
 # Actor

@@ -32,6 +32,7 @@ Scribbles now has its own GitHub Pages site at: https://hsuanchih.github.io/Scri
 
 ---
 ## Swift Concurrency
+* [Actor](docs/Swift-Concurrency/Actor.md)
 
 ---
 ## Playground

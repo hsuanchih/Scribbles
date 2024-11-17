@@ -1,7 +1,7 @@
 ---
 layout: default
 title: SwiftUI - Data Flow
-parent: Cocoa
+parent: SwiftUI
 ---
 
 # SwiftUI - Data Flow

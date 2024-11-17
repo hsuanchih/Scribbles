@@ -13,8 +13,6 @@ Scribbles now has its own GitHub Pages site at: https://hsuanchih.github.io/Scri
 * [Concurrency, GCD & Operations](docs/Cocoa/Concurrency-GCD-Operations.md)
 * [Event-Handling & Responder Chain](docs/Cocoa/Event-Handling-And-Responder-Chain.md)
 * [Run-Loop](docs/Cocoa/Run-Loop.md)
-* [SwiftUI - Data Flow](docs/Cocoa/SwiftUI-Data-Flow.md)
-* [SwiftUI - Presentation](docs/Cocoa/SwiftUI-Presentation.md)
 
 ---
 ## Swift
@@ -35,6 +33,11 @@ Scribbles now has its own GitHub Pages site at: https://hsuanchih.github.io/Scri
 * [Actor](docs/Swift-Concurrency/Actor.md)
 * [Global Actor](docs/Swift-Concurrency/Global-Actor.md)
 * [Sendable](docs/Swift-Concurrency/Sendable.md)
+
+---
+## SwiftUI
+* [Data Flow](docs/SwiftUI/SwiftUI-Data-Flow.md)
+* [Presentation](docs/SwiftUI/SwiftUI-Presentation.md)
 
 ---
 ## Playground

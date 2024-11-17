@@ -1,7 +1,7 @@
 ---
 layout: default
 title: SwiftUI - Presentation
-parent: Cocoa
+parent: SwiftUI
 ---
 
 # SwiftUI - Presentation

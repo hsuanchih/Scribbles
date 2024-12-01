@@ -7,9 +7,6 @@ Scribbles now has its own GitHub Pages site at: https://hsuanchih.github.io/Scri
 ---
 ## Cocoa
 * [Auto Layout](docs/Cocoa/Auto-Layout.md)
-* [Combine - Publisher, Subscriber & Subscription](docs/Cocoa/Combine-Publisher-Subscriber-Subscription.md)
-* [Combine Publishers - Operator, Subject & @Published](docs/Cocoa/Combine-Publishers-Operator-Subject-Published.md)
-* [Combine Subscribers - Assign & Sink](docs/Cocoa/Combine-Subscribers-Assign-Sink.md)
 * [Concurrency, GCD & Operations](docs/Cocoa/Concurrency-GCD-Operations.md)
 * [Event-Handling & Responder Chain](docs/Cocoa/Event-Handling-And-Responder-Chain.md)
 * [Run-Loop](docs/Cocoa/Run-Loop.md)
@@ -29,15 +26,21 @@ Scribbles now has its own GitHub Pages site at: https://hsuanchih.github.io/Scri
 * [CurrentThreadScheduler](docs/RxSwift/CurrentThreadScheduler.md)
 
 ---
-## Swift Concurrency
-* [Actor](docs/Swift-Concurrency/Actor.md)
-* [Global Actor](docs/Swift-Concurrency/Global-Actor.md)
-* [Sendable](docs/Swift-Concurrency/Sendable.md)
+## Combine
+* [Combine - Publisher, Subscriber & Subscription](docs/Cocoa/Combine-Publisher-Subscriber-Subscription.md)
+* [Combine Publishers - Operator, Subject & @Published](docs/Cocoa/Combine-Publishers-Operator-Subject-Published.md)
+* [Combine Subscribers - Assign & Sink](docs/Cocoa/Combine-Subscribers-Assign-Sink.md)
 
 ---
 ## SwiftUI
 * [Data Flow](docs/SwiftUI/SwiftUI-Data-Flow.md)
 * [Presentation](docs/SwiftUI/SwiftUI-Presentation.md)
+
+---
+## Swift Concurrency
+* [Actor](docs/Swift-Concurrency/Actor.md)
+* [Global Actor](docs/Swift-Concurrency/Global-Actor.md)
+* [Sendable](docs/Swift-Concurrency/Sendable.md)
 
 ---
 ## Playground

@@ -4,6 +4,10 @@ I'm starting a scratchpad to digest various concepts, starting with the basics &
 
 Scribbles now has its own GitHub Pages site at: https://hsuanchih.github.io/Scribbles/.
 
+___
+## Java
+* [ConcurrentMap](docs/Java/ConcurrentMap.md)
+
 ---
 ## Cocoa
 * [Auto Layout](docs/Cocoa/Auto-Layout.md)
